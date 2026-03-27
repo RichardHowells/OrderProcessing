@@ -6,7 +6,7 @@
 
 double getValue(double price, double quantity)
 {
-	double stockValue = price * quantity;
+	auto stockValue = price * quantity;
 	return stockValue;
 }
 
