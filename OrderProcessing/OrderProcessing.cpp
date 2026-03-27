@@ -4,11 +4,8 @@
 
 #include <iostream>
 
-double getValue(double price, double quantity)
-{
-	auto stockValue = price * quantity;
-	return stockValue;
-}
+//double getValue(double price, double quantity = 100.0);
+#include "stockvalue.h"
 
 // overload
 double getValue(double price)
@@ -29,3 +26,9 @@ int main()
 
 	std::cout << "Program completed successfully\n";
 }
+//
+//double getValue(double price, double quantity)
+//{
+//	auto stockValue = price * quantity;
+//	return stockValue;
+//}
