@@ -4,11 +4,8 @@
 
 #include <iostream>
 
-auto getStockValue(double price, double quantity = 100.0)
-{
-	auto stockValue = price * quantity;
-	return stockValue;
-}
+//double getStockValue(double price, double quantity = 100.0);
+#include "stockvalue.h"
 
 
 int main()
@@ -21,3 +18,9 @@ int main()
 
 	std::cout << "Program completed successfully\n";
 }
+//
+//double getStockValue(double price, double quantity)
+//{
+//	auto stockValue = price * quantity;
+//	return stockValue;
+//}
