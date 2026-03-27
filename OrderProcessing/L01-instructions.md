@@ -1,9 +1,17 @@
-## Working with global (stand-alone) functions
+## Program Organisation
 
-1. Write a function (`getValue`)
-    - accept two double values `price` and `quantity`.
-    - return the product as a `double`
-1. Place it above `main` in the file. (A function has to be declared before it is used. Here you are defining the function; a definition is always a declaration.)
+### Use a function declaration
+1. Move the `getValue` function below the `main` function
+1. Notice that the code will not compile.  C++ requires that the function is at least declared before use
+1. Add a function declaration above `main`
+1. Discover that auto cannot work in this case.  Change the function return type to `double` (two places)
+1. The program should now run as before
+### Separately compile the function
+1. Move the function declaration into a new header file `stockvalue.h`
+1. `#include` that file into `OrderProcessing.cpp`
+1. Move the function definition into a new implementation file `stockvalue.cpp`
+1. `stockvalue.cpp` should also `#include "stockvalue.h"`
+1. The program should work as before
 
 1. Test it by calling from `main`
     - use a line like this to display the result on `stdout`

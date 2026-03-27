@@ -128,9 +128,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="OrderProcessing.cpp" />
+    <ClCompile Include="stockvalue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="instructions.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stockvalue.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
