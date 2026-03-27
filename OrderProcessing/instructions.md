@@ -3,6 +3,7 @@
 1. Write a function (`getStockValue`)
     - accept two double values `price` and `quantity`.
     - return the product as a `double`
+1. Place it above `main` in the file. (A function has to be declared before it is used. Here you are defining the function; a definition is always a declaration.)
 
 1. Test it by calling from `main`
     - use a line like this to display the result on `stdout`
