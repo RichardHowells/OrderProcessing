@@ -26,5 +26,21 @@ int main()
 			std::cout << "getValue(" << i * 20 << ", 50) " << getValue(i * 20, 50) << "\n";
 	}
 
+	std::cout << "using a while loop\n";
+	int i{ 0 };
+	while (i < 10)
+	{
+		switch (i % 2)
+		{
+		case 0:
+			std::cout << "getStockValue(" << i * 10 << ", 50) " << getStockValue(i * 10, 50) << "\n";
+			break;
+		case 1: // Could use default here
+			std::cout << "getStockValue(" << i * 20 << ", 50) " << getStockValue(i * 20, 50) << "\n";
+			break;
+		}
+		++i;
+	}
+
 	std::cout << "Program completed successfully\n";
 }
