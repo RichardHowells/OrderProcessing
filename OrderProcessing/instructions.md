@@ -16,3 +16,9 @@
 
 1. Test your overload by calling it from `main`
 
+## Bonus ideas
+
+1. Try using the `auto` keyword to infer the type of any local variables in your code.
+
+1. Try using `auto` as the return type on your functions
+
