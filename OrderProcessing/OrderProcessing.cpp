@@ -4,19 +4,11 @@
 
 #include <iostream>
 
-double getStockValue(double price, double quantity)
+auto getStockValue(double price, double quantity = 100.0)
 {
-	double stockValue = price * quantity;
+	auto stockValue = price * quantity;
 	return stockValue;
 }
-
-// overload
-double getStockValue(double price)
-{
-	double stockValue = price * 100.0;
-	return stockValue;
-}
-
 
 
 int main()
