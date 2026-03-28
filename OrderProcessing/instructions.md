@@ -19,7 +19,10 @@
 
 ## Bonus ideas
 
-1. Try using the `auto` keyword to infer the type of any local variables in your code.
+1. Remove (maybe comment out) the single parameter overload.  On the double parameter overload give quantity a default argument of 100. The program should work unchanged
 
-1. Try using `auto` as the return type on your functions
+1. Try using the `auto` keyword to infer the type of any local variables in your code. The program should work unchanged
+
+1. Try using `auto` as the return type on your function(s). The program should work unchanged.  We will find out later that there are limited circumstances where `auto` return type is allowed
+
 
