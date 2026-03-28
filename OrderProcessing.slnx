@@ -4,6 +4,7 @@
     <Platform Name="x86" />
   </Configurations>
   <Folder Name="/Solution Items/">
+    <File Path="CreateLabFolders.ps1" />
     <File Path="README.md" />
   </Folder>
   <Project Path="OrderProcessing/OrderProcessing.vcxproj" />
