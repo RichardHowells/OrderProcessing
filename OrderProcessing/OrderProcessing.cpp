@@ -7,14 +7,17 @@
 //double getStockValue(double price, double quantity = 100.0);
 #include "stockvalue.h"
 
+using namespace mallon::cpp;
 
 int main()
 {
 	std::cout << "Hello World!\n";
 
+	// Call to mallon::cpp::getStockValue is inferred via the using statement at the top of the file
 	std::cout << "getStockValue(10, 50) " << getStockValue(10, 50) << "\n";
 
-	std::cout << "getStockValue(10) " << getStockValue(10) << "\n";
+	// Even with the using statement present, a fuly qualified call is still allowed
+	std::cout << "getStockValue(10) " << mallon::cpp::getStockValue(10) << "\n";
 
 	std::cout << "using a for loop\n";
 	for (int i = 0; i < 10; ++i)
@@ -43,9 +46,3 @@ int main()
 
 	std::cout << "Program completed successfully\n";
 }
-//
-//double getStockValue(double price, double quantity)
-//{
-//	auto stockValue = price * quantity;
-//	return stockValue;
-//}
