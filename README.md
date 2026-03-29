@@ -4,7 +4,7 @@
 
 ## Starting a new lab
 
-For each new lab I want to try starting with a delete of the `instructions.md` followed by creating an empty one.  I think it will help with evading merge conflicts in the rebase part of a hotfix.  Try it!
+For each new lab we shold start with a delete of the `instructions.md` followed by creating an empty one.  There will still be a merge conflict with it after a hotfix merge/rebase.  Merge conflicts are a fact of life!
 
 
 ## How to handle a 'hotfix'
