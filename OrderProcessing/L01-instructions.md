@@ -1,9 +1,9 @@
 ## Program Organisation
 
 ### Use a function declaration
-1. Move the `getStockValue` function below the `main` function
+1. Move the `getStockValue` function definition below the `main` function
 1. Notice that the code will not compile.  C++ requires that the function is at least declared before use
-1. Add a function declaration above `main`
+1. Add a function declaration for `getStockValue` above `main`
 1. Discover that auto cannot work in this case.  Change the function return type to `double` (two places)
 1. The program should now run as before
 ### Separately compile the function
