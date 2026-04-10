@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cctype>
+#include <cstddef>
 
 //double getValue(double price, double quantity = 100.0);
 #include "stockvalue.h"
@@ -63,7 +65,8 @@ int main()
 		}
 	}
 
-	// Need to be REALLY careful in this loop. site_t cannot handle negative values
+	// Need to be REALLY careful in this loop. size_t cannot handle negative values
+	// Must NOT generate a negative value in it
 	cout << "Print the words in reverse order\n";
 	for (size_t i = words.size(); i > 0; --i)
 		cout << words[i-1] << "\n";
@@ -76,7 +79,7 @@ int main()
 	std::cout << "getValue(10) " << mallon::cpp::getValue(10) << '\n';
 
 	std::cout << "using a for loop\n";
-	for (int i = 0; i < 10; ++i)
+	for (size_t i = 0; i < 10; ++i)
 	{
 		if (i % 2 == 0)
 			std::cout << "getValue(" << i * 10 << ", 50) " << getValue(i * 10, 50) << '\n';
@@ -85,7 +88,7 @@ int main()
 	}
 
 	std::cout << "using a while loop\n";
-	int i{ 0 };
+	size_t i{ 0 };
 	while (i < 10)
 	{
 		switch (i % 2)
