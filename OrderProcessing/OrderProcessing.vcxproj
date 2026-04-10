@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="L02-instructions.md" />
+    <None Include="L03-instructions.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
