@@ -1,7 +1,7 @@
 #include "stockvalue.h"
 
 // You can nest namespaces via simple nesting
-// or you can next them in one statement (see the .h file)
+// or you can nest them in one statement (see the .h file)
 namespace mallon
 {
 	namespace cpp
