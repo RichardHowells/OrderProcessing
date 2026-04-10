@@ -27,12 +27,14 @@ int main()
 	// C++ strings are mutable
 	for (size_t i = 0; i < greeting.length(); ++i)
 	{
-		if (greeting[i] == 'a' || greeting[i] == 'e' || greeting[i] == 'o' || greeting[i] == 'u')
+		if (greeting[i] == 'a' || greeting[i] == 'e' || greeting[i] == 'i' || greeting[i] == 'o' || greeting[i] == 'u')
 		{
 			greeting[i] += 'A' - 'a';		// This is a very C style trick but you may see it in existing code
 			greeting[i] = toupper(greeting[i]);	// Better practice
 		}
 	}
+
+	cout << greeting << "\n";
 
 	// Split the string up into 'word's' and add each word into a vector<string>
 	// A 'word' is a contiguous sequence of non space characters
