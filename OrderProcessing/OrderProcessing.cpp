@@ -63,7 +63,8 @@ int main()
 		}
 	}
 
-	// Need to be REALLY careful in this loop. site_t cannot handle negative values
+	// Need to be REALLY careful in this loop. size_t cannot handle negative values
+	// Must NOT generate a negative value in it
 	cout << "Print the words in reverse order\n";
 	for (size_t i = words.size(); i > 0; --i)
 		cout << words[i-1] << "\n";
