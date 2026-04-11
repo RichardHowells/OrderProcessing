@@ -10,6 +10,7 @@
 1. Use the plus-assign operator (`+=`) to append `" We should study C++!"`
 
 	### Strings are indexable and mutable
+	#### Convert the vowels to uppercase
 1. Write a loop to index through each character of the list
 1. If a character is a lowercase vowel (ie. a,e,i,o, or u) overwrite it with it's upper case equivalent
 	
@@ -24,4 +25,23 @@
 1. Identify groups of pure spaces and ignore them
 1. Identify groups of non-blank characters.  Capture each character into a temporary string
 1. At the end of a word group, append (`push_back`) the temporary into the `words` vector
-1. Print the words in the vector in reverse order. **WARNING** - using `size_t` is a good practice, but you must be extremly careful NEVER to generate a negative number.  Size_t cannot work with negative numbers.
+1. Print the words in the vector in reverse order. **WARNING** - using `size_t` is a good practice, but you must be extremly careful NEVER to generate a negative number.  Size_t cannot represent with negative numbers
+	### Bonus ideas
+1. Temporarily change the type of the one of the loop control variables to `int`.  Does your compiler give you any warning messages? (***note this behaviour will be compiler dependent.  The compiler is not obliged to give ANY message***)
+
+	`int` (typically) cannot hold the full range of possible return values from `vector::size`.  There is a risk with a very large vector (over about 2 billion items) that `int` cannot correctly represent the length
+
+1. Examine how your compiler behaves if `size_t` is presented with a negative value.  In the solution code this could be changing the loop that traverses the words vector backwards from this...
+	```C++
+		for (size_t i = words.size(); i > 0; --i)
+		cout << words[i-1] << "\n";
+	```
+	...to this...
+	```C++
+		for (size_t i = words.size()-1; i >= 0; --i)
+		cout << words[i] << "\n";
+	```
+	Superficially these two codes are identical.  The second version relies on `i` becoming less than zero, specifically `-1`, which `site_t` cannot represent.  Microsoft's Visual Studio 2026 can give a warning that the loop will run forever
+1. Modify your program so that a word is considered to be a group of alphabetic characters only. ***Hint - research the `isalpha()` function
+
+	

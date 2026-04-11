@@ -42,18 +42,18 @@ int main()
 	vector<string> words;
 	for (size_t i = 0; i < greeting.length();)	// Note - no change expression
 	{
-		if (greeting[i] == ' ')
+		if (greeting[i] == ' ' || !isalpha(greeting[i]))
 		{
-			// Hit a group of spaces - just step over them
-			while (i < greeting.length() && greeting[i] == ' ')
+			// Hit a group of spaces/punctuators - just step over them
+			while (i < greeting.length() && (greeting[i] == ' ' || !isalpha(greeting[i])))
 				++i;
 		}
 		else
 		{
-			// Hit a word - a group of non-spaces
+			// Hit a word - a group of alphabetics
 			// Capture it
 			string word{ "" };
-			while (i < greeting.length() && greeting[i] != ' ')
+			while (i < greeting.length() && greeting[i] != ' ' && isalpha(greeting[i]))
 			{
 				word += greeting[i];
 				++i;
@@ -69,6 +69,10 @@ int main()
 	for (size_t i = words.size(); i > 0; --i)
 		cout << words[i-1] << "\n";
 
+	// The compiler *may* notice that this results in an infinite loop
+	// On Visual C++ 2026 it's noted in the IDE, but requires enabling all warnings (-Wall) in the compiler
+	//for (size_t i = words.size()-1; i >= 0; --i)
+	//	cout << words[i] << "\n";
 
 	// Call to mallon::cpp::getStockValue is inferred via the using statement at the top of the file
 	std::cout << "getStockValue(10, 50) " << getStockValue(10, 50) << "\n";
