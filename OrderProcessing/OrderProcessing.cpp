@@ -32,30 +32,37 @@ int main()
 		if (greeting[i] == 'a' || greeting[i] == 'e' || greeting[i] == 'i' || greeting[i] == 'o' || greeting[i] == 'u')
 		{
 			greeting[i] += 'A' - 'a';		// This is a very C style trick but you may see it in existing code
-			greeting[i] = toupper(greeting[i]);	// Better practice
+
+			// The library function std::toupper is better practice. BUT is only defined for ASCII characters
+			// Anyone using a character set outside ASCII can run into undefined behaviour with raw uase of toupper
+			// This convoluted expression is a safe way to use it.
+			greeting[i] = static_cast<char>(std::toupper(static_cast<unsigned char>(greeting[i])));	// Better practice
 		}
 	}
 
 	cout << greeting << "\n";
 
 	// Split the string up into 'word's' and add each word into a vector<string>
-	// A 'word' is a contiguous sequence of non space characters
+	// A 'word' is a contiguous sequence of alphabetic characters
 
 	vector<string> words;
 	for (size_t i = 0; i < greeting.length();)	// Note - no change expression
 	{
-		if (greeting[i] == ' ')
+		// Like toupper (mentioned above) isalpha is only defined for ASCII characters.
+		// It should have the same protection.  For clarity that has not been dine in this
+		// section of code
+		if (!isalpha(greeting[i]))
 		{
-			// Hit a group of spaces - just step over them
-			while (i < greeting.length() && greeting[i] == ' ')
+			// Hit a group of spaces/punctuators - just step over them
+			while (i < greeting.length() && (!isalpha(greeting[i])))
 				++i;
 		}
 		else
 		{
-			// Hit a word - a group of non-spaces
+			// Hit a word - a group of alphabetics
 			// Capture it
 			string word{ "" };
-			while (i < greeting.length() && greeting[i] != ' ')
+			while (i < greeting.length() && isalpha(greeting[i]))
 			{
 				word += greeting[i];
 				++i;
@@ -71,6 +78,9 @@ int main()
 	for (size_t i = words.size(); i > 0; --i)
 		cout << words[i-1] << "\n";
 
+	// Your compiler *may* notice that this results in an infinite loop
+	//for (size_t i = words.size()-1; i >= 0; --i)
+	//	cout << words[i] << "\n";
 
 	// Call to mallon::cpp::getValue is inferred via the using statement at the top of the file
 	std::cout << "getValue(10, 50) " << getValue(10, 50) << '\n';
@@ -79,7 +89,7 @@ int main()
 	std::cout << "getValue(10) " << mallon::cpp::getValue(10) << '\n';
 
 	std::cout << "using a for loop\n";
-	for (size_t i = 0; i < 10; ++i)
+	for (size_t i = 0; i < 10; ++i)		// size_t is the best practice here. auto would infer signed int
 	{
 		if (i % 2 == 0)
 			std::cout << "getValue(" << i * 10 << ", 50) " << getValue(i * 10, 50) << '\n';
