@@ -2,6 +2,7 @@
 //
 
 
+#include <iomanip>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -81,6 +82,8 @@ int main()
 	// Your compiler *may* notice that this results in an infinite loop
 	//for (size_t i = words.size()-1; i >= 0; --i)
 	//	cout << words[i] << "\n";
+
+	cout << fixed << setprecision(2);
 
 	// Call to mallon::cpp::getValue is inferred via the using statement at the top of the file
 	std::cout << "getValue(10, 50) " << getValue(10, 50) << '\n';
