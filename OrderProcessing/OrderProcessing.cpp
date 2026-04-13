@@ -2,6 +2,7 @@
 //
 
 
+#include <iomanip>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -73,6 +74,8 @@ int main()
 	// On Visual C++ 2026 it's noticed in the IDE, but requires enabling all warnings (-Wall) in the compiler
 	//for (size_t i = words.size()-1; i >= 0; --i)
 	//	cout << words[i] << "\n";
+
+	cout << fixed << setprecision(2);
 
 	// Call to mallon::cpp::getStockValue is inferred via the using statement at the top of the file
 	std::cout << "getStockValue(10, 50) " << getStockValue(10, 50) << "\n";
