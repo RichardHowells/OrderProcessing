@@ -75,7 +75,9 @@ int main()
 	//for (size_t i = words.size()-1; i >= 0; --i)
 	//	cout << words[i] << "\n";
 
-	cout << fixed << setprecision(2);
+	// Set the double to output in fixed point with two digits after the decimal point
+	std::cout << fixed << setprecision(2);
+
 
 	// Call to mallon::cpp::getStockValue is inferred via the using statement at the top of the file
 	std::cout << "getStockValue(10, 50) " << getStockValue(10, 50) << "\n";
@@ -87,9 +89,9 @@ int main()
 	for (int i = 0; i < 10; ++i)
 	{
 		if (i % 2 == 0)
-			std::cout << "getStockValue(" << i * 10 << ", 50) " << getStockValue(i * 10, 50) << "\n";
+			std::cout << "getStockValue(" << setw(3) << i * 10 << ", 50) " << setw(7) << getStockValue(i * 10, 50) << "\n";
 		else
-			std::cout << "getStockValue(" << i * 20 << ", 50) " << getStockValue(i * 20, 50) << "\n";
+			std::cout << "getStockValue(" << setw(3) << i * 20 << ", 50) " << setw(7) << getStockValue(i * 20, 50) << "\n";
 	}
 
 	std::cout << "using a while loop\n";
@@ -99,10 +101,10 @@ int main()
 		switch (i % 2)
 		{
 		case 0:
-			std::cout << "getStockValue(" << i * 10 << ", 50) " << getStockValue(i * 10, 50) << "\n";
+			std::cout << "getStockValue(" << setw(3) << i * 10 << ", 50) " << setw(7) << getStockValue(i * 10, 50) << "\n";
 			break;
 		case 1: // Could use default here
-			std::cout << "getStockValue(" << i * 20 << ", 50) " << getStockValue(i * 20, 50) << "\n";
+			std::cout << "getStockValue(" << setw(3) << i * 20 << ", 50) " << setw(7) << getStockValue(i * 20, 50) << "\n";
 			break;
 		}
 		++i;
