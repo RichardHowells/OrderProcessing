@@ -25,8 +25,7 @@ function checkoutCode {
 
 
 
-
-
+This needs rewriting in Python so that it can work on Linux as well
 
 
 
