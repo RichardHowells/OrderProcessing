@@ -79,32 +79,40 @@ int main()
 	std::cout << fixed << setprecision(2);
 
 
-	// Call to mallon::cpp::getStockValue is inferred via the using statement at the top of the file
-	std::cout << "getStockValue(10, 50) " << getStockValue(10, 50) << "\n";
+	// mallon::cpp::Stock is inferred via the using statement at the top of the file
+	Stock apple;
+	apple.setTicker("AAPL");
+	apple.setPrice(50);
 
-	// Even with the using statement present, a fuly qualified call is still allowed
-	std::cout << "getStockValue(10) " << mallon::cpp::getStockValue(10) << "\n";
+	std::cout << "apple.getStockValue(10) " << apple.getStockValue(10) << "\n";
 
-	std::cout << "using a for loop\n";
+	// Even with the using statement present, a fully qualified name is still allowed
+	mallon::cpp::Stock microsoft;
+	microsoft.setTicker("MSFT");
+	microsoft.setPrice(75);
+
+	std::cout << "microsoft.getStockValue(10) " << microsoft.getStockValue(10) << "\n";
+
+	std::cout << "using a for loop with apple\n";
 	for (int i = 0; i < 10; ++i)
 	{
 		if (i % 2 == 0)
-			std::cout << "getStockValue(" << setw(3) << i * 10 << ", 50) " << setw(7) << getStockValue(i * 10, 50) << "\n";
+			std::cout << "apple.getStockValue(" << setw(3) << i * 10 << ") " << setw(7) << apple.getStockValue(i * 10) << "\n";
 		else
-			std::cout << "getStockValue(" << setw(3) << i * 20 << ", 50) " << setw(7) << getStockValue(i * 20, 50) << "\n";
+			std::cout << "apple.getStockValue(" << setw(3) << i * 20 << ") " << setw(7) << apple.getStockValue(i * 20) << "\n";
 	}
 
-	std::cout << "using a while loop\n";
+	std::cout << "using a while loop with microsoft\n";
 	int i{ 0 };
 	while (i < 10)
 	{
 		switch (i % 2)
 		{
 		case 0:
-			std::cout << "getStockValue(" << setw(3) << i * 10 << ", 50) " << setw(7) << getStockValue(i * 10, 50) << "\n";
+			std::cout << "microsoft.getStockValue(" << setw(3) << i * 10 << ") " << setw(7) << microsoft.getStockValue(i * 10) << "\n";
 			break;
 		case 1: // Could use default here
-			std::cout << "getStockValue(" << setw(3) << i * 20 << ", 50) " << setw(7) << getStockValue(i * 20, 50) << "\n";
+			std::cout << "microsoft.getStockValue(" << setw(3) << i * 20 << ") " << setw(7) << microsoft.getStockValue(i * 20) << "\n";
 			break;
 		}
 		++i;
