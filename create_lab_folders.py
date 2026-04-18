@@ -33,6 +33,12 @@ def checkoutCode(repoDir:str, gitTag:str, directoryName:str):
             return []
     shutil.copytree('.', directoryName, dirs_exist_ok=True, ignore=ignore_git_directory)
 
+def identify_highest_numbered_tag():
+    # Will use git tag -l *.*.* to get all the tags
+    # Sort descending then pick out the highest numbered x's in 5.2.x, and 4.1.x
+    # Can assume that there are only y.1.x and y.2.x type tags
+    pass
+
 
 
 #Need a data structure per lab...
