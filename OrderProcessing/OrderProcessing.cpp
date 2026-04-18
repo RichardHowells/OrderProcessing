@@ -80,16 +80,12 @@ int main()
 
 
 	// mallon::cpp::Stock is inferred via the using statement at the top of the file
-	Stock apple;
-	apple.setTicker("AAPL");
-	apple.setPrice(50);
+	const Stock apple{ "AAPL", 50 };
 
 	std::cout << "apple.getStockValue(10) " << apple.getStockValue(10) << "\n";
 
 	// Even with the using statement present, a fully qualified name is still allowed
-	mallon::cpp::Stock microsoft;
-	microsoft.setTicker("MSFT");
-	microsoft.setPrice(75);
+	mallon::cpp::Stock microsoft{ "MSFT",75 };
 
 	std::cout << "microsoft.getStockValue(10) " << microsoft.getStockValue(10) << "\n";
 

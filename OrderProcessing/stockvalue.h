@@ -9,13 +9,23 @@ namespace mallon::cpp
 		double price;
 
 	public:
+		Stock(std::string ticker, double price);
+
 		void setPrice(double newPrice);
-		double getPrice();
+		double getPrice() const
+		{
+			return price;
+		}
 
 		void setTicker(std::string newTicker);
-		std::string getTicker();
+		std::string getTicker() const;
 
-		double getStockValue(double quantity);
+		double getStockValue(double quantity) const;
 	};
+
+	inline std::string Stock::getTicker() const
+	{
+		return ticker;
+	}
 }
 
