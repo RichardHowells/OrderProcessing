@@ -128,9 +128,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="OrderProcessing.cpp" />
+    <ClCompile Include="portfolio.cpp" />
     <ClCompile Include="stockvalue.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="portfolio.h" />
     <ClInclude Include="stockvalue.h" />
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +140,10 @@
     <None Include="L03-instructions.md" />
     <None Include="L04-instructions.md" />
     <None Include="L05-instructions.md" />
+    <None Include="L06-instructions.md">
+      <SubType>
+      </SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
