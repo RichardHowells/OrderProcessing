@@ -10,9 +10,21 @@
 //double getValue(double price, double quantity = 100.0);
 #include "stockvalue.h"
 #include "stockvalue.h"
+#include "portfolio.h"
 
 using namespace mallon::cpp;
 using namespace std;
+
+void comparePortfolios(Portfolio& p1, Portfolio& p2)
+{
+	std::cout << "Passed by reference, ";
+	if (p1.averageStockPrice() < p2.averageStockPrice())
+		std::cout << "p2 has the highest average cost\n";
+	else if (p1.averageStockPrice() == p2.averageStockPrice())
+		std::cout << "p1 and p2 have equal average cost\n";
+	else
+		std::cout << "p1 has the highest average cost\n";
+}
 
 int main()
 {
@@ -69,7 +81,7 @@ int main()
 	// Must NOT generate a negative value in it
 	cout << "Print the words in reverse order\n";
 	for (size_t i = words.size(); i > 0; --i)
-		cout << words[i-1] << "\n";
+		cout << words[i - 1] << "\n";
 
 	// Your compiler *may* notice that this results in an infinite loop
 	// On Visual C++ 2026 it's noticed in the IDE, but requires enabling all warnings (-Wall) in the compiler
@@ -81,7 +93,7 @@ int main()
 
 
 	// mallon::cpp::Stock is inferred via the using statement at the top of the file
-	const Stock apple{ "AAPL", 50 };
+	Stock apple{ "AAPL", 50 };
 
 	std::cout << "apple.getValue(10) " << apple.getValue(10) << "\n";
 
@@ -114,6 +126,20 @@ int main()
 		}
 		++i;
 	}
+
+	Portfolio portfolio;
+	std::cout << "Average price for empty portfolio " << portfolio.averageStockPrice() << "\n";
+
+	portfolio.addStock(&apple);
+	std::cout << "Average price for empty portfolio " << portfolio.averageStockPrice() << "\n";
+
+	portfolio.addStock(&microsoft);
+	std::cout << "Average price for empty portfolio " << portfolio.averageStockPrice() << "\n";
+
+	Portfolio portfolio2;
+	comparePortfolios(portfolio, portfolio2);
+	comparePortfolios(portfolio2, portfolio);
+	comparePortfolios(portfolio, portfolio);
 
 	std::cout << "Program completed successfully\n";
 }
