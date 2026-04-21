@@ -1,4 +1,5 @@
 #include "portfolio.h"
+#include "DiscountPolicy.h"
 
 namespace mallon::cpp
 {
@@ -33,6 +34,16 @@ namespace mallon::cpp
 		else
 			return totalValue / count;
 
+	}
+
+	void Portfolio::addDiscountPolicy(double discountPercentage, const std::string& reason)
+	{
+		discountPolicy = new DiscountPolicy(discountPercentage, reason);
+	}
+
+	std::tuple<double, std::string> Portfolio::getDiscountPolicy() 
+	{
+		return std::make_tuple(discountPolicy->percentDiscount, discountPolicy->reason);
 	}
 
 }
