@@ -12,11 +12,6 @@
 #include "stockvalue.h"
 #include "portfolio.h"
 
-struct memory_block {
-	unsigned long stamp = 0;
-
-};
-
 // Very crude leak checker.  Does NOT cover all cases
 // On entry to a block of code where new and delete should balance, set the allocationCount to 0
 // AFTER the block exits, check allocationCount.  If new/delete *do* balance, it should be zero
