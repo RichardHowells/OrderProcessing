@@ -1,4 +1,5 @@
 from email.mime import base
+from genericpath import isfile
 import os, stat
 import shutil
 import subprocess
@@ -118,6 +119,10 @@ def moveAndRenameInstructionsFiles(labName:str, majorVersion:str, baseDir:str, c
             print(f"Removing {p}")
             p.unlink()
 
+        # And for the old style instructions
+        if os.path.isfile(dir + "/" + "instructions.md"):
+            os.remove(dir + "/" + "instructions.md")
+
 
 #Need a data structure per lab...
 #Where to put the start/end/bonus directories
@@ -164,10 +169,10 @@ else:
     # print(args.filename, args.count, args.verbose)
 
     # Map the labname to the repo major version
-    labList = { "Ex01": "1" #,
-               # "Ex02": "2",
-               # "Ex03": "3",
-               # "Ex04": "4"
+    labList = { "Ex01": "1",
+               "Ex02": "2",
+               "Ex03": "3",
+               "Ex04": "4"
                }
         
 
