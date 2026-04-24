@@ -4,6 +4,7 @@
     <Platform Name="x86" />
   </Configurations>
   <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
     <File Path="create_lab_folders.py" />
     <File Path="README.md" />
   </Folder>
