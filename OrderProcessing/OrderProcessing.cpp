@@ -181,6 +181,14 @@ int main()
 		const auto [discountPercentage, reason] = portfolio.getDiscountPolicy();
 		std::cout << "Discount " << discountPercentage << " reason " << reason << "\n";
 
+		Portfolio portfolio3{ portfolio2 };
+		Portfolio portfolio4{ portfolio };
+		const auto [discountPercentage4, reason4] = portfolio4.getDiscountPolicy();
+		std::cout << "From portfolio4 - Discount " << discountPercentage4 << " reason " << reason4 << "\n";
+
+
+		//Portfolio portfolio5;
+		//portfolio5 = portfolio;
 	}
 	if (allocationCount == 0)
 		std::cout << "No obvious leaks\n";
