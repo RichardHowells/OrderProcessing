@@ -3,8 +3,23 @@
 
 namespace mallon::cpp
 {
+	Portfolio::Portfolio(const Portfolio& other)
+		:stock1{ other.stock1 }, stock2{ other.stock2 }
+	{
+		if (other.discountPolicy)
+			discountPolicy = std::make_unique<DiscountPolicy>(*other.discountPolicy);
+	}
+	Portfolio& Portfolio::operator=(const Portfolio& right)
+	{
+		stock1 = right.stock2;
+		stock2 = right.stock2;
+		if (right.discountPolicy)
+			discountPolicy = std::make_unique<DiscountPolicy>(*right.discountPolicy);
+		else
+			discountPolicy = nullptr;
 
-
+		return *this;
+	}
 	void Portfolio::addStock(Stock* pStock)
 	{
 		if (stock1 == nullptr)
