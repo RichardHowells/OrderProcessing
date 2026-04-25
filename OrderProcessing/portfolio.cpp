@@ -3,12 +3,21 @@
 
 namespace mallon::cpp
 {
+	Portfolio::Portfolio(const Portfolio& other)
+		: stock1{ other.stock1 }, stock2{ other.stock2 }, discountPolicy{nullptr}
+	{
+		if (other.discountPolicy)		// Common idiom for != nullptr.  In C/C++ any non-zero qualifies as true
+			discountPolicy = new DiscountPolicy{ *other.discountPolicy };
+	}
+
+
 	Portfolio::~Portfolio()
 	{
 		// No need for a null check.  
 		// Delete of a null pointer is allowed and is a no-op
 		delete discountPolicy;
 	}
+
 
 	void Portfolio::addStock(Stock* pStock)
 	{

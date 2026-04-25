@@ -18,7 +18,12 @@ namespace mallon::cpp
 		DiscountPolicy* discountPolicy{ nullptr };
 
 	public:
+		Portfolio() = default;
 		~Portfolio();
+		//Portfolio(const Portfolio& other) = delete;
+		Portfolio(const Portfolio& other);
+		Portfolio& operator=(const Portfolio& other) = delete;
+
 		void addStock(Stock* pStock);
 
 		double averageStockPrice() const;
