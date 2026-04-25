@@ -10,6 +10,21 @@ namespace mallon::cpp
 			discountPolicy = new DiscountPolicy{ *other.discountPolicy };
 	}
 
+	Portfolio& Portfolio::operator=(const Portfolio& other)
+	{
+		DiscountPolicy* discountPolicyTemp;
+		if (other.discountPolicy)
+			discountPolicyTemp = new DiscountPolicy(*other.discountPolicy);
+		else
+			discountPolicyTemp = nullptr;
+
+		stock1 = other.stock1;
+		stock2 = other.stock2;
+		delete discountPolicy;
+		discountPolicy = discountPolicyTemp;
+
+		return *this;
+	}
 
 	Portfolio::~Portfolio()
 	{

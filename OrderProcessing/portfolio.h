@@ -20,7 +20,8 @@ namespace mallon::cpp
 		~Portfolio();
 		//Portfolio(const Portfolio& other) = delete;
 		Portfolio(const Portfolio& other);
-		Portfolio& operator=(const Portfolio& other) = delete;
+		//Portfolio& operator=(const Portfolio& other) = delete;
+		Portfolio& operator=(const Portfolio& other);
 
 		void addStock(Stock* pStock);
 
