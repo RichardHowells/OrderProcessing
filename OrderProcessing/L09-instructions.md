@@ -15,3 +15,18 @@
 
 	### Bonus ideas 
 
+	#### Reinstate copy and assign
+1. Reinstate the copy constructor declaration
+1. Implement it in the .cpp file
+	1. Copy **all** of the members, except the discount policy pointer, in the constructor initialization list.  Omit the discount policy pointer.  Its default constructor will set it to `nullptr`
+	1. In the body, if the object being copied from has a non null discount policy pointer, use `std::make_unique` to create a **copy** of the pointer's target object, assign the result to `discountPolicy`.  
+1. Reinstate the `operator=` declaration
+1. Implement it in the .cpp file
+	1. memberwise assign across each individual member, except the discount policy pointer
+	1. test the parameter object's discount policy pointer.  If not == `nullptr` then use `std::make_unique` to create a copy of the target object.  Assign the result directly to `discountPoilicy`.  Else if equal to `nullptr` assign `nullptr` to `discountPolicy`
+	1. There is no need to manually delete `discountPolicy`'s original target object.  `unique_ptr` will take care of that as you assign its new value 
+1. In `OrderProcessing.cpp` uncomment the copy and assign lines.
+1. Your code should run, as before, and without any leaks
+1. How much smaller is your code? (`portfolio.cpp` is about 66 lines in the solution files)
+
+
