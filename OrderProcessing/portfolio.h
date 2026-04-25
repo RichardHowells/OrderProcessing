@@ -20,6 +20,9 @@ namespace mallon::cpp
 
 	public:
 		Portfolio() = default;
+		Portfolio(const Portfolio& other);
+
+		Portfolio& operator=(const Portfolio& right);
 
 		void addStock(Stock* pStock);
 
