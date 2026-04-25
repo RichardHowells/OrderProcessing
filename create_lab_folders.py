@@ -26,7 +26,7 @@ def checkoutCode(repoDir:str, gitTag:str, directoryName:str):
         shutil.rmtree(directoryName)
 
     print(f"Creating and populating {directoryName}")
-    os.mkdir(directoryName)
+    os.makedirs(directoryName)                # mkdirs makes any intermediate directories as well
 
     def ignore_git_directory(src_dir, files):
         # Passed a directory and a list of items in that directory
@@ -124,27 +124,6 @@ def moveAndRenameInstructionsFiles(labName:str, majorVersion:str, baseDir:str, c
             os.remove(dir + "/" + "instructions.md")
 
 
-#Need a data structure per lab...
-#Where to put the start/end/bonus directories
-#Instructions (from the bonus - if there is one) into all of them:
-
-
-# class Lab:
-#     def __init__(self, labName:str, startTag:str = None, endTag:str = None, bonusTag:str = None):
-#         self.labName = labName
-#         self.startTag = startTag if startTag is not None else labName + "-base"
-#         self.endTag=endTag if endTag is not None else labName + "-completed"
-#         self.bonusTag=bonusTag if bonusTag is not None else labName + "-completed-bonus"
-
-class Lab:
-    def __init__(self, labName:str, labMajorVersion, tagMap:dict[str:dict[str,str]]):
-        self.labName = labName
-        self.startTag = startTag if startTag is not None else labName + "-base"
-        self.endTag=endTag if endTag is not None else labName + "-completed"
-        self.bonusTag=bonusTag if bonusTag is not None else labName + "-completed-bonus"
-
-
-
 import sys
 if 'test' in sys.argv:
     # Run tests
@@ -156,34 +135,37 @@ if 'test' in sys.argv:
 
 else:
        
-    # import argparse
-    # parser = argparse.ArgumentParser(
-    #                 prog='ProgramName',
-    #                 description='What the program does',
-    #                 epilog='Text at the bottom of help')
-    # parser.add_argument('filename')           # positional argument
-    # parser.add_argument('-c', '--count')      # option that takes a value
-    # parser.add_argument('-v', '--verbose',
-    #                 action='store_true')
-    # args = parser.parse_args()
-    # print(args.filename, args.count, args.verbose)
+    import argparse
+    parser = argparse.ArgumentParser(
+                    prog='create_lab_folders',
+                    description='Checks out the lab code repo.  Creates directories for exercise start point, completed point, and bonus completed point',
+                    epilog='')
+    parser.add_argument('remoteRepoUrl', default="https://github.com/RichardHowells/OrderProcessing.git")           # Where to get the code from
+    parser.add_argument('repoDir', default="D:/Customers/Mallon/UpdatingMaterials/2026-cpp/labs-test-repo/OrderProcessing")                 # Where to clone the code to
+    parser.add_argument('labsBaseDir', default="D:/Customers/Mallon/UpdatingMaterials/2026-cpp/labs-test-directory")             # Where to assemble all the lab directories
+
+    args = parser.parse_args()
+    print(args.remoteRepoUrl, args.repoDir, args.labsBaseDir)
 
     # Map the labname to the repo major version
     labList = { "Ex01": "1",
                "Ex02": "2",
                "Ex03": "3",
-               "Ex04": "4"
+               "Ex04": "4",
+               "Ex05": "5",
+               "Ex06": "6",
+               "Ex07": "7",
                }
         
 
     # The lab directories will be assembled under this
-    labsBaseDir = r"D:/Customers/Mallon/UpdatingMaterials/2026-cpp/labs-test-directory"
+    labsBaseDir = args.labsBaseDir
 
     # The directory that the remote repo gets cloned into
-    repoDir = r"D:/Customers/Mallon/UpdatingMaterials/2026-cpp/labs-test-repo/OrderProcessing"
-    remoteRepoUrl = "https://github.com/RichardHowells/OrderProcessing.git"
+    repoDir = args.repoDir
+    remoteRepoUrl = args.remoteRepoUrl
 
-    def remove_readonly(func, path, _):
+    def remove_readonly(func, path, _ = None):
         "Enclosed function to clear the readonly bit and reattempt the removal"
         os.chmod(path, stat.S_IWRITE)
         func(path)
@@ -192,7 +174,8 @@ else:
     if os.path.isdir(repoDir):
         # The directory is already there - remove it recursively
         print(f"Removing repository directory {repoDir}")
-        shutil.rmtree(repoDir, onexc=remove_readonly)
+        #shutil.rmtree(repoDir, onexc=remove_readonly)  # onexc requires 3.12
+        shutil.rmtree(repoDir, onerror=remove_readonly)
 
     subprocess.run(["git", "clone", remoteRepoUrl, repoDir])
 
@@ -203,9 +186,9 @@ else:
 
 
     for labName, repoMajorVersion in labList.items():
-        checkoutCode(repoDir, f"{repoMajorVersion}.0.{tagMap[repoMajorVersion]["0"]}", labsBaseDir + "/" + labName + "-base")
-        checkoutCode(repoDir, f"{repoMajorVersion}.1.{tagMap[repoMajorVersion]["1"]}", labsBaseDir + "/" + labName + "-completed")
-        checkoutCode(repoDir, f"{repoMajorVersion}.2.{tagMap[repoMajorVersion]["2"]}", labsBaseDir + "/" + labName + "-completed-bonus")
+        checkoutCode(repoDir, f"{repoMajorVersion}.0.{tagMap[repoMajorVersion]['0']}", labsBaseDir + "/" + labName + "-base")
+        checkoutCode(repoDir, f"{repoMajorVersion}.1.{tagMap[repoMajorVersion]['1']}", labsBaseDir + "/" + labName + "-completed")
+        checkoutCode(repoDir, f"{repoMajorVersion}.2.{tagMap[repoMajorVersion]['2']}", labsBaseDir + "/" + labName + "-completed-bonus")
 
         # Fix lab instruction files...
         # The final version of the lab instructions ends up in the -completed-bonus directory.
