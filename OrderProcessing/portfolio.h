@@ -3,6 +3,9 @@
 
 #include <tuple>
 
+#include <memory>
+
+#include "DiscountPolicy.h"
 #include "stockvalue.h"
 namespace mallon::cpp
 {
@@ -15,15 +18,10 @@ namespace mallon::cpp
 		Stock* stock1{ nullptr };
 		Stock* stock2{ nullptr };
 
-		DiscountPolicy* discountPolicy{ nullptr };
+		std::unique_ptr<DiscountPolicy> discountPolicy;
 
 	public:
 		Portfolio() = default;
-		~Portfolio();
-		//Portfolio(const Portfolio& other) = delete;
-		Portfolio(const Portfolio& other);
-		//Portfolio& operator=(const Portfolio& other) = delete;
-		Portfolio& operator=(const Portfolio& other);
 
 		void addStock(Stock* pStock);
 
