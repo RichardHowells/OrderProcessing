@@ -7,6 +7,7 @@
     <File Path=".gitignore" />
     <File Path="create_lab_folders.py" />
     <File Path="README.md" />
+    <File Path="restore_tags.sh" />
   </Folder>
   <Project Path="OrderProcessing/OrderProcessing.vcxproj" Id="e9818a83-0f3f-4b99-b322-57c5cdf0011b" />
 </Solution>

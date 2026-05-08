@@ -138,6 +138,7 @@
     <ClInclude Include="stockvalue.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="L01-instructions.md" />
     <None Include="L02-instructions.md" />
     <None Include="L03-instructions.md" />
     <None Include="L04-instructions.md" />
