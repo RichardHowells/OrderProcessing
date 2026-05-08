@@ -2,6 +2,11 @@
 # Posted by milahu, modified by community. See post 'Timeline' for change history
 # Retrieved 2026-05-08, License - CC BY-SA 4.0
 
+# EDIT IN VSCODE!!!!  NEED TO PRESERVE JUST LF BETWEEN LINES
+# EDIT IN VSCODE!!!!  NEED TO PRESERVE JUST LF BETWEEN LINES
+# EDIT IN VSCODE!!!!  NEED TO PRESERVE JUST LF BETWEEN LINES
+# EDIT IN VSCODE!!!!  NEED TO PRESERVE JUST LF BETWEEN LINES
+
 #!/usr/bin/env bash
 
 # fix git tags after rewriting the git history
@@ -9,8 +14,7 @@
 
 # what branches are allowed for tags?
 # usually, tags are not allowed on backup branches
-#branches="master branch2 branch3"
-branches="master"
+branches="main"
 
 branches_regex="$(printf '|%s' $branches)"
 branches_regex="(${branches_regex:1})"
