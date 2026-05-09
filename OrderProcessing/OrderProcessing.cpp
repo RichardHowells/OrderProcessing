@@ -37,15 +37,15 @@ int main()
 	cout << greeting << "\n";
 
 	// Split the string up into 'word's' and add each word into a vector<string>
-	// A 'word' is a contiguous sequence of non space characters
+	// A 'word' is a contiguous sequence of alphabetic characters
 
 	vector<string> words;
 	for (size_t i = 0; i < greeting.length();)	// Note - no change expression
 	{
-		if (greeting[i] == ' ' || !isalpha(greeting[i]))
+		if (!isalpha(greeting[i]))
 		{
 			// Hit a group of spaces/punctuators - just step over them
-			while (i < greeting.length() && (greeting[i] == ' ' || !isalpha(greeting[i])))
+			while (i < greeting.length() && (!isalpha(greeting[i])))
 				++i;
 		}
 		else
@@ -53,7 +53,7 @@ int main()
 			// Hit a word - a group of alphabetics
 			// Capture it
 			string word{ "" };
-			while (i < greeting.length() && greeting[i] != ' ' && isalpha(greeting[i]))
+			while (i < greeting.length() && isalpha(greeting[i]))
 			{
 				word += greeting[i];
 				++i;
@@ -69,8 +69,8 @@ int main()
 	for (size_t i = words.size(); i > 0; --i)
 		cout << words[i-1] << "\n";
 
-	// The compiler *may* notice that this results in an infinite loop
-	// On Visual C++ 2026 it's noted in the IDE, but requires enabling all warnings (-Wall) in the compiler
+	// Your compiler *may* notice that this results in an infinite loop
+	// On Visual C++ 2026 it's noticed in the IDE, but requires enabling all warnings (-Wall) in the compiler
 	//for (size_t i = words.size()-1; i >= 0; --i)
 	//	cout << words[i] << "\n";
 
