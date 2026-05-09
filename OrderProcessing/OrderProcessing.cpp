@@ -9,6 +9,7 @@
 
 //double getStockValue(double price, double quantity = 100.0);
 #include "stockvalue.h"
+#include "stockvalue.h"
 
 using namespace mallon::cpp;
 using namespace std;

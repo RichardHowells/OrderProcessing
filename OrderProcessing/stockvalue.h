@@ -1,3 +1,5 @@
+#ifndef STOCKVALUE_H
+#define STOCKVALUE_H
 
 #include <string>
 // You can nest namespaces in one statement
@@ -29,3 +31,5 @@ namespace mallon::cpp
 	}
 }
 
+
+#endif // !STOCKVALUE_H
