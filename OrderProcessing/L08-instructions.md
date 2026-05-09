@@ -4,39 +4,43 @@
 
 1. Working in `OrderProcessing.cpp`. **INSIDE** the nested block, just before the end is a good place, create a copy of the `Portfolio` object that has no `DiscountPolicy`
 1. Your code should run as before
-1. Also inside the nested block, create a copy of the `Portfolio` object that does have a `DiscountPolicy`
+1. Also inside the nested block, create a copy of the `Portfolio` object that has a `DiscountPolicy`
 	```C++
 	Portfolio portfolio4{ portfolio };
 	```
-1. Your code should now crash/misbehave in some way.  It's caused by the two objects fighting over the same `DiscountPolicy` object and ultimately double deleting it as the objects go out of the block's scope
+1. Your code should now crash/misbehave in some way.  It's caused by the two objects fighting over the same `DiscountPolicy` object and ultimately double deleting it as the objects go out of scope at the end of the block
 
-1. Comment out the copies
+1. Comment out the copy
+	
 	#### Try assigning a `Portfolio` object with a `DiscountPolicy`
+
+1. Use code something like 
 	```C++
 	Portfolio portfolio5;
 	portfolio5 = portfolio;
 	```
 1. Expect your code to crash in much the same way as the copy code did
 
-	#### The compiler written copy and assign operations are dangerous in a type that owns resources.  The `Portfolio` type 'owns' the `DiscountPolicy` and mis-manages it
+	#### The compiler written copy and assign operations are dangerous in a type that owns resources.  The `Portfolio` type 'owns' the `DiscountPolicy`.  Currently it mis-manages it
 
-1. declare the copy constructor and the operator=; mark both as deleted
+1. Declare the copy constructor and `operator=`; mark both as deleted
 1. See that the assign operation will not compile
 1. Uncomment the copy operations and see that they will not compile either
 1. Discover that this **also** makes the compiler withdraw the complier supplied default constructor
 1. Add a programmer written default constructor to `Portfolio`.  It is sufficient to `default` it
-1. Discover that now attempts to copy or assign `Portfolio` objects are now flagged as errors by the compiler
-1. Comment out the copy and assign statements
+1. Discover that now attempts to copy or assign `Portfolio` objects are flagged as errors by the compiler
+1. Comment out the attempts to copy and assign
  
 
 	#### Implement a deep copy constructor
+
 1. Change the deleted copy constructor into a declaration
 1. Implement it in the .cpp file
-	1. Copy **all** of the members, except the discount policy pointer, in the constructor initialization list set the discount policy pointer to `nullptr`
-	1. In the body, if the object being copied from has a non null discount policy pointer, create a **copy** of the pointer's target object
+	1. In the constructor initialization list copy **all** of the members, except the discount policy pointer, set the discount policy pointer to `nullptr`
+	1. In the constructor body, if the object being copied from has a non null discount policy pointer, create a **copy** of the pointer's target object
 1. In `OrderProcessing.cpp` uncomment the copy lines
 1. Your program should run cleanly with no reported leaks 
-1. You should print the values from the copy's `DiscountPolicy` to check that it is a faithful copy
+1. Print the values from the copy's `DiscountPolicy` to check that it is a faithful copy
 
 	### Bonus idea
 
@@ -50,5 +54,5 @@
 1. Test at this stage (uncomment the assignment in `OrderProcessing.cpp`) and discover that you have a leak.  If you don't see the leak add an assignment that assigns **to** a `Portfolio` with a `DiscountPolicy`
 1. Return to `Portfolio::operator=` before assigning to the discount policy pointer, delete the object it points to
 1. Retest and expect to see that the leak is gone
-1. You should print the values from the copy's `DiscountPolicy` to check that it is a faithful copy
+1. Print the values from the copy's `DiscountPolicy` to check that it is a faithful copy
 
