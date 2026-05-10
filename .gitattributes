@@ -2,7 +2,7 @@
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
 * text=auto
-
+*.sh text eol=lf		# Shell scripts to always have unix style line endings
 ###############################################################################
 # Set default behavior for command prompt diff.
 #
