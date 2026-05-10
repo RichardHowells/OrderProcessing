@@ -34,8 +34,13 @@ def checkoutCode(repoDir:str, gitTag:str, directoryName:str):
         if '.git' in files:
             return ['.git']
         else:
-            return []
+            return list[str]()
     shutil.copytree(repoDir, directoryName, dirs_exist_ok=True, ignore=ignore_git_directory)
+
+    # Add a file with a versioning annotation
+    with open(f'{directoryName}/versiontag.{gitTag}.txt', "w") as version_tag_file:
+        version_tag_file.write(f'Extracted from the git repo tag: {gitTag}\n')
+
 
 
 def identify_highest_numbered_patch_by_version(tags_as_string:str):
@@ -76,7 +81,6 @@ def convert_tags_list_to_map(tag_list:list[str]):
 
     return mapped_tags
 
-import os
 def tags_as_str(repoDir:str):
     cwd = os.getcwd()
     os.chdir(repoDir)
@@ -85,30 +89,30 @@ def tags_as_str(repoDir:str):
     os.chdir(cwd)
     return tags_as_a_str
 
-def moveAndRenameInstructionsFiles(labName:str, majorVersion:str, baseDir:str, completedDir:str, completedBonusDir:str):
+def moveAndRenameAndAnnotateInstructionsFiles(labName:str, majorVersion:str, baseDir:str, 
+                                              completedDir:str, completedBonusDir:str,
+                                              bonus_version_git_tag:str):
     # Find and rename the instructions
     # Rename Lnn-instructions.md to Exmm-instructions.md
     if len(majorVersion) == 1:
         majorVersion = "0" + majorVersion
     
     instructions_file_name = labName + "-instructions.md"
+    instructions_file_from_repo = completedBonusDir + "/OrderProcessing/" + "L" + majorVersion + "-instructions.md"
+    instructions_file_in_lab_directory = completedBonusDir + "/OrderProcessing/" + instructions_file_name
     print(f"{instructions_file_name=}")
-    if os.path.isfile(completedBonusDir + "/OrderProcessing/" + "L" + majorVersion + "-instructions.md"):
-        os.rename(completedBonusDir + "/OrderProcessing/" + "L" + majorVersion + "-instructions.md", completedBonusDir + "/OrderProcessing/" + instructions_file_name)
+    if os.path.isfile(instructions_file_from_repo):
+        os.rename(instructions_file_from_repo, instructions_file_in_lab_directory)
+
+        # Append a provenance annotation
+        with open(instructions_file_in_lab_directory, "a") as instructions_file:
+            instructions_file.write(f'<p align="right">Extracted from the git repo tag: {bonus_version_git_tag}</p>\n')
 
         #copy to the other directories
-        shutil.copyfile(completedBonusDir + "/OrderProcessing/" + instructions_file_name, completedDir + "/OrderProcessing/" + instructions_file_name)
-        shutil.copyfile(completedBonusDir + "/OrderProcessing/" + instructions_file_name, baseDir + "/OrderProcessing/" + instructions_file_name)
+        shutil.copyfile(instructions_file_in_lab_directory, completedDir + "/OrderProcessing/" + instructions_file_name)
+        shutil.copyfile(instructions_file_in_lab_directory, baseDir + "/OrderProcessing/" + instructions_file_name)
     else:
-        print(f"Try the older style naming... looking in {completedBonusDir=}")
-        if os.path.isfile(completedBonusDir + "/OrderProcessing/" + "instructions.md"):
-            os.rename(completedBonusDir + "/OrderProcessing/" + "instructions.md", completedBonusDir + "/OrderProcessing/" + instructions_file_name)
-
-            #copy to the other directories
-            shutil.copyfile(completedBonusDir + "/OrderProcessing/" + instructions_file_name, completedDir + "/OrderProcessing/" + instructions_file_name)
-            shutil.copyfile(completedBonusDir + "/OrderProcessing/" + instructions_file_name, baseDir + "/OrderProcessing/" + instructions_file_name)
-        else:
-            raise Exception(f"Cannot find the instructions file. {labName=} {majorVersion=} {completedBonusDir=}")
+        raise Exception(f"Cannot find the instructions file. {labName=} {majorVersion=} {completedBonusDir=}")
 
     print("delete unwanted instructions files...")
     import pathlib
@@ -118,10 +122,6 @@ def moveAndRenameInstructionsFiles(labName:str, majorVersion:str, baseDir:str, c
         for p in pathlib.Path(dir).glob("L*-instructions.md"):
             print(f"Removing {p}")
             p.unlink()
-
-        # And for the old style instructions
-        if os.path.isfile(dir + "/" + "instructions.md"):
-            os.remove(dir + "/" + "instructions.md")
 
 
 import sys
@@ -134,7 +134,10 @@ if 'test' in sys.argv:
     print(f'{rv=}')
 
 else:
-       
+    
+    # In development I run this as...
+    # python3 ./create_lab_folders.py https://github.com/RichardHowells/OrderProcessing.git D:/Customers/Mallon/UpdatingMaterials/2026-cpp/labs-test-repo/OrderProcessing D:/Customers/Mallon/UpdatingMaterials/2026-cpp/labs-test-directory
+    #
     import argparse
     parser = argparse.ArgumentParser(
                     prog='create_lab_folders',
@@ -190,7 +193,8 @@ else:
     for labName, repoMajorVersion in labList.items():
         checkoutCode(repoDir, f"{repoMajorVersion}.0.{tagMap[repoMajorVersion]['0']}", labsBaseDir + "/" + labName + "-base")
         checkoutCode(repoDir, f"{repoMajorVersion}.1.{tagMap[repoMajorVersion]['1']}", labsBaseDir + "/" + labName + "-completed")
-        checkoutCode(repoDir, f"{repoMajorVersion}.2.{tagMap[repoMajorVersion]['2']}", labsBaseDir + "/" + labName + "-completed-bonus")
+        bonus_version_git_tag = f"{repoMajorVersion}.2.{tagMap[repoMajorVersion]['2']}"
+        checkoutCode(repoDir, bonus_version_git_tag, labsBaseDir + "/" + labName + "-completed-bonus")
 
         # Fix lab instruction files...
         # The final version of the lab instructions ends up in the -completed-bonus directory.
@@ -199,8 +203,15 @@ else:
         # Plus the early labs did this differently
 
         # Required results...
-        #   - copy the right instructions file, renamed as labname-instructions.md from the bonus directory to both the other directories
+        #   - identify the right instructions file
+        #   - annotate it's provenance
+        #   - rename it as labname-instructions.md 
+        #   - copy it from the bonus directory to both the other directories
         #   - retain it in the bonus directory as well
         #   - something like Ex01-instructions.md
         #   - delete all the unwanted instructions files
-        moveAndRenameInstructionsFiles(labName, repoMajorVersion, labsBaseDir + "/" + labName + "-base", labsBaseDir + "/" + labName + "-completed", labsBaseDir + "/" + labName + "-completed-bonus")
+        moveAndRenameAndAnnotateInstructionsFiles(labName, repoMajorVersion, 
+                                                  labsBaseDir + "/" + labName + "-base", 
+                                                  labsBaseDir + "/" + labName + "-completed", 
+                                                  labsBaseDir + "/" + labName + "-completed-bonus",
+                                                  bonus_version_git_tag)
