@@ -42,42 +42,18 @@ def checkoutCode(repoDir:str, gitTag:str, directoryName:str):
         version_tag_file.write(f'Extracted from the git repo tag: {gitTag}\n')
 
 
-
-def identify_highest_numbered_patch_by_version(tags_as_string:str):
-    # Given tags with the format major.minor.patch...
-    # Picks out the latest patch in each tag, assuming latest == highest patch number
-    # Returns a list of major.minor.patch numbers, in descending order
-    # Method:
-
-    tags = [str(s) for s in tags_as_string.split()]
-
-    tags.sort()
-    tags.reverse()
-
-    def key_extractor(tag:str):
-        parts = tag.split('.')
-        # convert the two senior parts to two character numbers
-        return f'{int(parts[0]):02d}.{int(parts[1]):02d}'
-
-    return_value:list[str] = []
-    for _, group in itertools.groupby(tags, key_extractor):
-        # You can only pass over the iterator g once!
-        highest_patch_for_this_version = next(iter(group))
-        return_value.append(highest_patch_for_this_version)
-
-    return return_value
-
 def convert_tags_list_to_map(tag_list:list[str]):
     # converts a list of tags, each of the form major.minor.patch
     # (where minor is known to be 1 (exercise start point) or 2 (basic ex end point) or 3 (bonus part end point))
     # to a map of maps m[major][minor] -> patch
+    # ASSUMES the tags are sorted NUMERICALLY (not stringwise) ascending. So this captures ONLY the highest patch number
     
     mapped_tags = dict[str, dict[str, str]]()
     for tag in tag_list:
         major, minor, patch = tag.split('.')
         if major not in mapped_tags:
             mapped_tags[major] = dict[str, str]()
-        mapped_tags[major][minor] = patch
+        mapped_tags[major][minor] = patch       # Will eventually capture the highest patch number
 
     return mapped_tags
 
@@ -126,9 +102,6 @@ def moveAndRenameAndAnnotateInstructionsFiles(labName:str, majorVersion:str, bas
 
 import sys
 if 'test' in sys.argv:
-    # Run tests
-    rv = identify_highest_numbered_patch_by_version("1.0.0 1.0.1 2.3.0 2.4.5")
-    print(f'{rv=}')
 
     rv = convert_tags_list_to_map(['1.0.99', '2.0.3', '2.1.0', '2.2.3'])
     print(f'{rv=}')
@@ -186,6 +159,17 @@ else:
 
     # Get all of the tags in the repo
     taglist = tags_as_str(repoDir).split()
+
+    # Sort the tags using numeric rules rather than text rules
+    # Enclosed function to provide the sort key.  
+    # Maps (say) 1.2.5 to 01.02.05
+    def key_extractor(tag:str):
+        parts = tag.split('.')
+        # convert the tag parts to two digit numbers
+        return f'{int(parts[0]):02d}.{int(parts[1]):02d}.{int(parts[2]):02d}'
+
+    taglist.sort(key=key_extractor)
+    print(f'{taglist=}')
 
     tagMap = convert_tags_list_to_map(taglist)
 
