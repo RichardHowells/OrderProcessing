@@ -3,6 +3,8 @@
 ###############################################################################
 * text=auto
 
+# Shell scripts to always have unix style line endings
+*.sh text eol=lf
 ###############################################################################
 # Set default behavior for command prompt diff.
 #
