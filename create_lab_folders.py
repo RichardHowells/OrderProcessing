@@ -133,6 +133,7 @@ else:
                "Ex07": "7",
                "Ex08": "8",
                "Ex09": "9",
+               "Ex10": "10"
                }
         
 
@@ -169,7 +170,7 @@ else:
         return f'{int(parts[0]):02d}.{int(parts[1]):02d}.{int(parts[2]):02d}'
 
     taglist.sort(key=key_extractor)
-    print(f'{taglist=}')
+    #print(f'{taglist=}')
 
     tagMap = convert_tags_list_to_map(taglist)
 
