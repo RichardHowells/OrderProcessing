@@ -128,14 +128,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DiscountPolicy.cpp" />
+    <ClCompile Include="future.cpp" />
     <ClCompile Include="OrderProcessing.cpp" />
     <ClCompile Include="portfolio.cpp" />
-    <ClCompile Include="stockvalue.cpp" />
+    <ClCompile Include="product.cpp" />
+    <ClCompile Include="stock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DiscountPolicy.h" />
+    <ClInclude Include="future.h" />
     <ClInclude Include="portfolio.h" />
-    <ClInclude Include="stockvalue.h" />
+    <ClInclude Include="product.h" />
+    <ClInclude Include="stock.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="L01-instructions.md" />

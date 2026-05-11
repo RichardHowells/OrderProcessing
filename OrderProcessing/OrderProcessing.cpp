@@ -10,8 +10,8 @@
 #include <cstddef>
 
 //double getValue(double price, double quantity = 100.0);
-#include "stockvalue.h"
-#include "stockvalue.h"
+#include "stock.h"
+#include "future.h"
 #include "portfolio.h"
 
 // Very crude leak checker.  Does NOT cover all cases
@@ -38,9 +38,9 @@ using namespace std;
 void comparePortfolios(const Portfolio& p1, const Portfolio& p2)
 {
 	std::cout << "Passed by const reference, ";
-	if (p1.averageStockPrice() < p2.averageStockPrice())
+	if (p1.averageProductValue() < p2.averageProductValue())
 		std::cout << "p2 has the highest average cost\n";
-	else if (p1.averageStockPrice() == p2.averageStockPrice())
+	else if (p1.averageProductValue() == p2.averageProductValue())
 		std::cout << "p1 and p2 have equal average cost\n";
 	else
 		std::cout << "p1 has the highest average cost\n";
@@ -189,13 +189,13 @@ int main()
 	{
 		::allocationCount = 0;
 		Portfolio portfolio;
-		std::cout << "Average price for empty portfolio " << portfolio.averageStockPrice() << '\n';
+		std::cout << "Average price for empty portfolio " << portfolio.averageProductValue() << '\n';
 
 		portfolio.addProduct(&apple);
-		std::cout << "Average price for apple only portfolio " << portfolio.averageStockPrice() << '\n';
+		std::cout << "Average price for apple only portfolio " << portfolio.averageProductValue() << '\n';
 
 		portfolio.addProduct(&microsoft);
-		std::cout << "Average price for apple + microsoft portfolio " << portfolio.averageStockPrice() << '\n';
+		std::cout << "Average price for apple + microsoft portfolio " << portfolio.averageProductValue() << '\n';
 
 		Portfolio portfolio2;
 		comparePortfolios(portfolio, portfolio2);
@@ -225,7 +225,7 @@ int main()
 
 		Portfolio portfolio6;
 		portfolio6.addProduct(&google);
-		std::cout << "Average price for Google only portfolio " << portfolio6.averageStockPrice() << "\n";
+		std::cout << "Average price for Google only portfolio " << portfolio6.averageProductValue() << "\n";
 
 	}
 	if (allocationCount == 0)

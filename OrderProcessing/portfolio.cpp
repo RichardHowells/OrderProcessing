@@ -28,7 +28,7 @@ namespace mallon::cpp
 			product2 = pStock;
 	}
 
-	double Portfolio::averageStockPrice() const
+	double Portfolio::averageProductValue() const
 	{
 		double totalValue = 0;
 		int count = 0;
