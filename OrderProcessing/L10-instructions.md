@@ -52,11 +52,37 @@
 
 	#### Call getValue polymorphically via a base class reference
 
-1 Repeat using a base class (`Product`) reference.  This is a little tricker because the base class reference variable has to be initialized in its definition and cannot be rebound.  You will need to use a separate reference variable each for `apple` and `google`.  This is not a great use case for references.  References really shine as parameter variables
+1. Repeat using a base class (`Product`) reference.  This is a little tricker because the base class reference variable has to be initialized in its definition and cannot be rebound.  You will need to use a separate reference variable each for `apple` and `google`.  This is not a great use case for references.  References really shine as parameter variables
 
 
 	### Bonus ideas
 
+	#### See override failures
+1. Make a tiny change to the signature of `Stock::getValue` - just removing the `const` would be enough
+1. See that the compiler complains
+
+	#### Have Portfolio use the base class Product 
+
+1. In `Portfolio.h/.cpp` change uses of class `Stock` to `Product`
+1. At this stage the code should run as before
+
+	#### Refactor Portfolio for clarity
+1. Rename `Portfolio::addStock` to `Portfolio::addProduct` this will require changes at the call sites too
+1. Rename the two `Stock *` fields.  Eg `stock1` to `product1`
+1. Make similar changes to parameter names to remove misleading identifier names
+
+	#### Change name and implementation of Portfolio::averageStockPrice
+1. Rename to `averageProductValue`
+1. Change the implementation to call the polymorphic `Product::getValue` passing the quantity as `1`
+1. In `OrderProcessing.cpp` create a new `Portfolio` object.  Test that you can 
+	1. add both `Stock`s and `Future`s
+	1. `averageProductValue` returns the correct result
+
+	#### Separate the three classes `Product`, `Stock`, `Future` into their own `.h/.cpp` files
+1. Remember:
+	1. Header guards
+	1. Add appropriate `#include`s
+	1. When done delete `stockvalue.h/.cpp`
 
 
 
