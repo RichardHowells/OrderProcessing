@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "DiscountPolicy.h"
-#include "stockvalue.h"
+#include "product.h"
 namespace mallon::cpp
 {
 	// Declaration for DiscountPolicy
@@ -26,7 +26,7 @@ namespace mallon::cpp
 
 		void addProduct(Product* pProduct);
 
-		double averageStockPrice() const;
+		double averageProductValue() const;
 
 		void addDiscountPolicy(double discountPercentage, const std::string& reason);
 		std::tuple<double, std::string> getDiscountPolicy();
