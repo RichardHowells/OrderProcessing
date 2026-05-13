@@ -20,6 +20,11 @@ public:
 		return stoi(content);
 	}
 
+
+	operator int() {
+		return stoi(content);
+	}
+
 };
 
 int main()
@@ -31,13 +36,14 @@ int main()
 
 	std::cout << a.to_int() << "\n";
 
+	std::cout << a << "\n";
 
 	Experiment b{ "99" };
 
 
-	//bool z = a == b;  //will not compile
-	//bool y = a < b;  //will not compile
-	//bool x = a > b;  //will not compile
+	bool z = a == b;  //will not compile
+	bool y = a < b;  //will not compile
+	bool x = a > b;  //will not compile
 
 }
 
