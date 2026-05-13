@@ -2,39 +2,42 @@
 //
 
 #include <iostream>
-#include <format>
+#include <string>
 
 class Experiment
 {
-	int number;
+	std::string content;
 
 public:
-	Experiment(int number) : number{ number } {}
+	Experiment(std::string content) : content{ content } {}
 
 	void display()
 	{
-		std::cout << "The number is " << number << "\n";
+		std::cout << "The content is " << content << "\n";
 	}
 
-	std::string toString() {
-		return std::format("{}", number);
+	int to_int() {
+		return stoi(content);
 	}
+
 };
 
 int main()
 {
 	std::cout << "Hello World!\n";
 
-	Experiment a{ 99 };
+	Experiment a{ "99" };
 	a.display();
-	std::cout << a.toString() << "\n";
 
-	Experiment b{ 99 };
+	std::cout << a.to_int() << "\n";
 
 
-	// bool z = a == b;  will not compile
-	// bool y = a < b;
-	// bool x = a > b;
+	Experiment b{ "99" };
+
+
+	//bool z = a == b;  //will not compile
+	//bool y = a < b;  //will not compile
+	//bool x = a > b;  //will not compile
 
 }
 
