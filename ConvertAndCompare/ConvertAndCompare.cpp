@@ -15,6 +15,10 @@ public:
 	{
 		std::cout << "The number is " << number << "\n";
 	}
+
+	std::string toString() {
+		return std::format("{}", number);
+	}
 };
 
 int main()
@@ -23,5 +27,14 @@ int main()
 
 	Experiment a{ 99 };
 	a.display();
+	std::cout << a.toString() << "\n";
+
+	Experiment b{ 99 };
+
+
+	// bool z = a == b;  will not compile
+	// bool y = a < b;
+	// bool x = a > b;
+
 }
 
