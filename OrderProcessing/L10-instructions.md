@@ -85,7 +85,7 @@
 	1. Add appropriate `#include`s
 	1. When done delete `stockvalue.h/.cpp`
 
-1. Add a `virtual` destructor to `class Product`.  It does not need any logic `virtual ~Product() {}` is suficient.  Add `sealed` to all classes that **don't** have a virtual destructor.
+1. Add a `virtual` destructor to `class Product`.  It does not need any logic `virtual ~Product() {}` is sufficient.  Add `sealed` to all classes that **don't** have a virtual destructor.
 
 	***Question*** Should `Stock` and `Future` be `sealed`?  Why? Or why not?
 
