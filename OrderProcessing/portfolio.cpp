@@ -31,10 +31,17 @@ namespace mallon::cpp
 		double totalValue = 0;
 		int count = 0;
 
-		for (const auto& pProduct : products)
+		//for (const auto& pProduct : products)
+		//{
+		//	++count;
+		//	totalValue += pProduct->getValue(1);
+		//}
+
+		// Using iterators to navigate the collection
+		for (auto it = products.begin(); it != products.end(); ++it)
 		{
 			++count;
-			totalValue += pProduct->getValue(1);
+			totalValue += (*it)->getValue(1);
 		}
 
 		if (count == 0)
