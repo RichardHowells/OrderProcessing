@@ -97,12 +97,34 @@
 
 	## Bonus ideas
 
-	### Spaceship - the one stop shop for comparisons - from C++ 20
+	### Spaceship - One Stop Shopping for Comparisons - (from C++ 20)
 
 1. Remove (comment out) the `operator <` in `Experiment`
-1. Add a three-way comparison operator to `Experiment`.  It should be:
-	1. A non-member function
-	1. Named `operator <=>`
+1. Add a three-way comparison operator to `Experiment`.  It should:
+	1. Be a non-member function
+	1. Be named `operator <=>`
 	1. Take two `const Experiment &`s as parameters
-	1. A `friend` so that it can access the non public members of `Experiment`
+	1. Return `std::strong_ordering`
+	1. Be a `friend` so that it can access the non public members of `Experiment`
+	1. Implement it using this code
+	
+	```C++
+		if (left.content < right.content)
+			return std::strong_ordering::less;
+		else if (right.content < left.content)
+			return std::strong_ordering::greater;
+		else
+			return std::strong_ordering::equal;
+	```
 
+1. Test your code.  You expect the sort to still produce text ascending values.  **AND** you expect the `<` `>` anomaly to be gone
+	
+	**NOTE** Implementing `operator <=>` implicitly implements **all** the secondary comparisons.  The compiler will prefer them over the conversion to `int` and builtin comparison
+
+	**NOTE** All of the comparison operators in the code compile
+
+1. This is potentially slower than it need be because it can require up to two calls to `std::string` comparison operators
+
+1. `std::string` has its own operator \<=>.  Delegating directly to that requires only one string comparison.  Try it
+
+1. In this example all the members (there is only one) participate in the comparison.  The compiler can automate generating that.  Try `default`ing the comparison.

@@ -36,15 +36,18 @@ public:
 	}
 
 	//friend inline bool operator ==(const Experiment& left, const Experiment& right) = default;
-	//friend std::strong_ordering operator <=>(const Experiment& left, const Experiment& right) = default;
 	//friend inline std::strong_ordering operator <=>(const Experiment& left, const Experiment& right) {
-	//	if (left.getContent() < right.getContent())
+	//	if (left.content < right.content)
 	//		return std::strong_ordering::less;
-	//	else if (left.getContent() > right.getContent())
+	//	else if (right.content < left.content)
 	//		return std::strong_ordering::greater;
 	//	else
 	//		return std::strong_ordering::equal;
 	//}
+	//friend inline std::strong_ordering operator <=>(const Experiment& left, const Experiment& right) {
+	//		return left.content <=> right.content;
+	//}
+	friend std::strong_ordering operator <=>(const Experiment& left, const Experiment& right) = default;
 
 
 
