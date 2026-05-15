@@ -12,5 +12,4 @@ namespace mallon::cpp
 		auto stockValue = getPrice() * quantity;
 		return stockValue;
 	}
-
 }

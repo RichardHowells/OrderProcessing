@@ -4,6 +4,7 @@
 #include <tuple>
 
 #include <memory>
+#include <vector>
 
 #include "DiscountPolicy.h"
 #include "product.h"
@@ -15,8 +16,7 @@ namespace mallon::cpp
 	// The more flexible version of Portfolio
 	class Portfolio final
 	{
-		Product* product1{ nullptr };
-		Product* product2{ nullptr };
+		std::vector<Product*> products;
 
 		std::unique_ptr<DiscountPolicy> discountPolicy;
 

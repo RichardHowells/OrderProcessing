@@ -1,6 +1,7 @@
 #pragma once
 #include "product.h"
 #include <string>
+#include <memory>
 
 namespace mallon::cpp
 {
@@ -12,6 +13,7 @@ namespace mallon::cpp
 		Future(std::string ticker, double price, double depreciation);
 
 		double getValue(double quantity) const override;
+
 	};
 
 }
