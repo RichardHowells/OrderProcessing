@@ -158,6 +158,7 @@
     <None Include="L08-instructions.md" />
     <None Include="L09-instructions.md" />
     <None Include="L10-instructions.md" />
+    <None Include="L11-instructions.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
