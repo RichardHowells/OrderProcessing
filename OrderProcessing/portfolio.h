@@ -11,7 +11,7 @@ namespace mallon::cpp
 	// Declaration for DiscountPolicy
 	struct DiscountPolicy;
 
-	// The trivial version of Portfolio
+	// The more flexible version of Portfolio
 	class Portfolio sealed
 	{
 		std::vector<Product*> products;

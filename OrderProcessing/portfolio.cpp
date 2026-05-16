@@ -1,6 +1,8 @@
 #include "portfolio.h"
 #include "DiscountPolicy.h"
 
+#include <numeric>
+
 namespace mallon::cpp
 {
 	Portfolio::Portfolio(const Portfolio& other)
@@ -28,9 +30,8 @@ namespace mallon::cpp
 
 	double Portfolio::averageProductValue() const
 	{
-		double totalValue = 0;
-		int count = 0;
-
+		// size_t count = 0;
+		// double totalValue = 0.0;
 		//for (const auto& pProduct : products)
 		//{
 		//	++count;
@@ -38,16 +39,20 @@ namespace mallon::cpp
 		//}
 
 		// Using iterators to navigate the collection
-		for (auto it = products.begin(); it != products.end(); ++it)
-		{
-			++count;
-			totalValue += (*it)->getValue(1);
-		}
+		//for (auto it = products.begin(); it != products.end(); ++it)
+		//{
+		//	++count;
+		//	totalValue += (*it)->getValue(1);
+		//}
 
-		if (count == 0)
+		double totalValue = std::accumulate(products.begin(), products.end(), 0.0,
+			[](auto runningTotal, const auto pObjectToAccumulate) { 
+				return runningTotal + pObjectToAccumulate->getValue(1); });
+
+		if (products.size() == 0)
 			return 0;
 		else
-			return totalValue / count;
+			return totalValue / products.size();
 
 	}
 
