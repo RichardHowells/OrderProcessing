@@ -196,7 +196,7 @@ else:
     repoDir = args.repoDir
     remoteRepoUrl = args.remoteRepoUrl
 
-    def remove_readonly(func:Callable[..., Any], path:str, _ = None):
+    def remove_readonly(func, path:str, _ = None):
         "Enclosed function to clear the readonly bit and reattempt the removal"
         os.chmod(path, stat.S_IWRITE)
         func(path)
