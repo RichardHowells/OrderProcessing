@@ -1,9 +1,6 @@
-from email.mime import base
-from genericpath import isfile
 import os, stat
 import shutil
 import subprocess
-import itertools
 
 def checkoutCode(repoDir:str, gitTag:str, directoryName:str):
     print(f"switching to tags/{gitTag}")
@@ -28,14 +25,19 @@ def checkoutCode(repoDir:str, gitTag:str, directoryName:str):
     print(f"Creating and populating {directoryName}")
     os.makedirs(directoryName)                # mkdirs makes any intermediate directories as well
 
-    # Enclosed function.  Directs copytree to ignore the .git directory
-    def ignore_git_directory(src_dir, files):
+    # Enclosed function.  Directs copytree to ignore the .git directory, and the README.md file
+    def ignore_git_directory(src_dir:str, files:list[str]):
         # Passed a directory and a list of items in that directory
         # Returns a list of items to EXCLUDE
+        rv = list[str]()
         if '.git' in files:
-            return ['.git']
-        else:
-            return list[str]()
+            rv.append('.git')
+
+        if 'README.md' in files:
+            rv.append('README.md')
+
+        return rv;
+
     shutil.copytree(repoDir, directoryName, dirs_exist_ok=True, ignore=ignore_git_directory)
 
     # Add a file with a versioning annotation
@@ -69,16 +71,39 @@ def tags_as_str(repoDir:str):
 def replace_in_slnx_file(slnx_file_name:str, old_string:str, replacement_string:str):
     if os.path.isfile(slnx_file_name):
         with open(slnx_file_name, "r+") as slnx_file:
-            content = slnx_file.read()
-            print(f"{old_string=}")
-            new_content = content.replace(old_string, replacement_string)
-            print(f"{replacement_string=}")
+            original_content = slnx_file.read()
+            print(f"{slnx_file_name=} {old_string=}")
+            new_content = original_content.replace(old_string, replacement_string)
+            if original_content == new_content:
+                # The name is not present in the slnx file.
+                # So insert it as new, in front of the closing Folder tag
+                new_content = original_content.replace("</Folder>", f"""    <File Path="{replacement_string}" />
+  </Folder>""")
+
+            # Strip out the README.md file...
+            new_content = new_content.replace('<File Path="README.md" />', '')
+
+            print(f"{slnx_file_name=} {replacement_string=}, {new_content=}")
+
+            # Overwrite the original slnx file
             slnx_file.seek(0, os.SEEK_SET)
 
             slnx_file.truncate()
             slnx_file.write(new_content)
 
     return
+
+def append_provenance_annotation(instructions_file_from_repo:str, bonus_version_git_tag:str):
+    # Append a provenance annotation
+    with open(instructions_file_from_repo, "a") as instructions_file:
+        instructions_file.write(f'<p align="right">Extracted from the git repo tag: {bonus_version_git_tag}</p>\n')
+
+def copy_add_provenance_update_slnx(original_instructions_file_path:str, completedBonusDir:str, labName:str, bonus_version_git_tag:str, majorVersion:str):
+        desired_instructions_file_path = completedBonusDir + "/" + labName + "-instructions.md"
+        shutil.copyfile(original_instructions_file_path, desired_instructions_file_path)
+        append_provenance_annotation(desired_instructions_file_path, bonus_version_git_tag)
+        # if it happens to appear in the slnx file then patch that too
+        replace_in_slnx_file(completedBonusDir + "/OrderProcessing.slnx", "L" + majorVersion + "-instructions.md", labName + "-instructions.md")
 
 
 def moveAndRenameAndAnnotateInstructionsFiles(labName:str, majorVersion:str, baseDir:str, 
@@ -90,31 +115,28 @@ def moveAndRenameAndAnnotateInstructionsFiles(labName:str, majorVersion:str, bas
         majorVersion = "0" + majorVersion
 
     #If there is an instructions file at the solution level...
-    if os.path.isfile(completedBonusDir + "/" + "L" + majorVersion + "-instructions.md"):
-        # Rename it to the Exnn-instructions type format
-        # if it happens to be in the slnx file then patch that too
-        replace_in_slnx_file(completedBonusDir + "/OrderProcessing.slnx", "L" + majorVersion + "-instructions.md", labName + "-instructions.md")
-    
-    instructions_file_name = labName + "-instructions.md"
+    print("Looking for ", completedBonusDir + "/" + "L" + majorVersion + "-instructions.md")
 
-    instructions_file_from_repo = completedBonusDir + "/OrderProcessing/" + "L" + majorVersion + "-instructions.md"
-    instructions_file_in_lab_directory = completedBonusDir + "/OrderProcessing/" + instructions_file_name
-    print(f"{instructions_file_name=}")
-    if os.path.isfile(instructions_file_from_repo):
-        os.rename(instructions_file_from_repo, instructions_file_in_lab_directory)
+    if os.path.isfile(original_instructions_file_path := (completedBonusDir + "/" + "L" + majorVersion + "-instructions.md")):
+        print(f"Found instructions file at {original_instructions_file_path=}")
+        # Copy it to the Exnn-instructions type format
+        copy_add_provenance_update_slnx(original_instructions_file_path, completedBonusDir, labName, bonus_version_git_tag, majorVersion)
+        copy_add_provenance_update_slnx(original_instructions_file_path, completedDir, labName, bonus_version_git_tag, majorVersion)
+        copy_add_provenance_update_slnx(original_instructions_file_path, baseDir, labName, bonus_version_git_tag, majorVersion)
 
-        # Append a provenance annotation
-        with open(instructions_file_from_repo, "a") as instructions_file:
-            instructions_file.write(f'<p align="right">Extracted from the git repo tag: {bonus_version_git_tag}</p>\n')
-
-        #copy to the parent directory
-        print("**** Need to inject into the .slnx file")
-        shutil.copyfile(instructions_file_in_lab_directory, completedDir + "/" + instructions_file_name)
-        #copy to the other versions (base and completed), also into the parent directory
-        shutil.copyfile(instructions_file_in_lab_directory, completedDir + "/" + instructions_file_name)
-        shutil.copyfile(instructions_file_in_lab_directory, baseDir + "/" + instructions_file_name)
+        print("Should delete L*-instructions.md files")
+        
     else:
-        raise Exception(f"Cannot find the instructions file. {labName=} {majorVersion=} {completedBonusDir=}")
+        instructions_file_from_repo = completedBonusDir + "/OrderProcessing/" + "L" + majorVersion + "-instructions.md"
+        if os.path.isfile(instructions_file_from_repo):
+            print(f"Found instructions file at {instructions_file_from_repo=}")
+
+            copy_add_provenance_update_slnx(instructions_file_from_repo, completedBonusDir, labName, bonus_version_git_tag, majorVersion)
+            copy_add_provenance_update_slnx(instructions_file_from_repo, completedDir, labName, bonus_version_git_tag, majorVersion)
+            copy_add_provenance_update_slnx(instructions_file_from_repo, baseDir, labName, bonus_version_git_tag, majorVersion)
+
+        else:
+            raise Exception(f"Cannot find the instructions file. {labName=} {majorVersion=} {completedBonusDir=}")
 
     print("delete unwanted instructions files...")
     import pathlib
@@ -122,8 +144,8 @@ def moveAndRenameAndAnnotateInstructionsFiles(labName:str, majorVersion:str, bas
         dir += "/OrderProcessing"
         print(f"Looking in {dir=}")
         for p in pathlib.Path(dir).glob("L*-instructions.md"):
-            print(f"Removing {p}")
             p.unlink()
+        print(f"Removed L*-instructions.md files")
 
 
 import sys
@@ -174,7 +196,7 @@ else:
     repoDir = args.repoDir
     remoteRepoUrl = args.remoteRepoUrl
 
-    def remove_readonly(func, path, _ = None):
+    def remove_readonly(func:Callable[..., Any], path:str, _ = None):
         "Enclosed function to clear the readonly bit and reattempt the removal"
         os.chmod(path, stat.S_IWRITE)
         func(path)
@@ -203,6 +225,13 @@ else:
     #print(f'{taglist=}')
 
     tagMap = convert_tags_list_to_map(taglist)
+
+    # Clean out the labs directory
+    if os.path.isdir(labsBaseDir):
+        # The directory is already there - remove it recursively
+        print(f"Removing labs directory {labsBaseDir}")
+        #shutil.rmtree(labsBaseDir, onexc=remove_readonly)  # onexc requires 3.12
+        shutil.rmtree(labsBaseDir)
 
 
     for labName, repoMajorVersion in labList.items():
