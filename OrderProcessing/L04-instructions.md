@@ -7,4 +7,4 @@
 
 	### Bonus idea
 
-1. Make the numbers line up in neat columns.  Suggested approach, notice that only variable width items are the integer result (`i * 10`) and the result of calling `getStockValue`.  Apply a `setw()` manipulator to each of these to regularize their output widths.
+1. Make the numbers line up in neat columns.  Suggested approach, notice that the only variable width items are the integer result (`i * 10`) and the result of calling `getStockValue`.  Apply a `setw()` manipulator to each of these to regularize their output widths.
