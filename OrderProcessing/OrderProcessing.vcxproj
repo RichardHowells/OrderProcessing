@@ -134,7 +134,7 @@
     <ClInclude Include="stockvalue.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="instructions.md" />
+    <None Include="L02-instructions.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
