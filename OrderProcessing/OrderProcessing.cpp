@@ -15,12 +15,23 @@
 using namespace mallon::cpp;
 using namespace std;
 
-void comparePortfolios(Portfolio& p1, Portfolio& p2)
+void comparePortfolios(const Portfolio& p1, const Portfolio& p2)
 {
-	std::cout << "Passed by reference, ";
+	std::cout << "Passed by const reference, ";
 	if (p1.averageStockPrice() < p2.averageStockPrice())
 		std::cout << "p2 has the highest average cost\n";
 	else if (p1.averageStockPrice() == p2.averageStockPrice())
+		std::cout << "p1 and p2 have equal average cost\n";
+	else
+		std::cout << "p1 has the highest average cost\n";
+}
+
+void comparePortfolios(const Portfolio* p1, const Portfolio* p2)
+{
+	std::cout << "Passed by const *, ";
+	if (p1->averageStockPrice() < p2->averageStockPrice())
+		std::cout << "p2 has the highest average cost\n";
+	else if (p1->averageStockPrice() == p2->averageStockPrice())
 		std::cout << "p1 and p2 have equal average cost\n";
 	else
 		std::cout << "p1 has the highest average cost\n";
@@ -131,15 +142,20 @@ int main()
 	std::cout << "Average price for empty portfolio " << portfolio.averageStockPrice() << "\n";
 
 	portfolio.addStock(&apple);
-	std::cout << "Average price for empty portfolio " << portfolio.averageStockPrice() << "\n";
+	std::cout << "Average price for apple only portfolio " << portfolio.averageStockPrice() << "\n";
 
 	portfolio.addStock(&microsoft);
-	std::cout << "Average price for empty portfolio " << portfolio.averageStockPrice() << "\n";
+	std::cout << "Average price for apple + microsoft portfolio " << portfolio.averageStockPrice() << "\n";
 
 	Portfolio portfolio2;
 	comparePortfolios(portfolio, portfolio2);
 	comparePortfolios(portfolio2, portfolio);
 	comparePortfolios(portfolio, portfolio);
+
+	comparePortfolios(&portfolio, &portfolio2);
+	comparePortfolios(&portfolio2, &portfolio);
+	comparePortfolios(&portfolio, &portfolio);
+
 
 	std::cout << "Program completed successfully\n";
 }
