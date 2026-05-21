@@ -12,7 +12,7 @@
 	### Strings are indexable and mutable
 	#### Convert the vowels to uppercase
 1. Write a loop to index through each character of the string
-1. If a character is a lowercase vowel (ie. a,e,i,o, or u) overwrite it with its upper case equivalent
+1. If a character is a lowercase vowel (i.e. a,e,i,o, or u) overwrite it with its upper case equivalent
 	
 	**Hint** - research `toupper()`
 1. Display the string on `cout`
