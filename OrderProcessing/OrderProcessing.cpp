@@ -79,32 +79,40 @@ int main()
 	std::cout << fixed << setprecision(2);
 
 
-	// Call to mallon::cpp::getValue is inferred via the using statement at the top of the file
-	std::cout << "getValue(10, 50) " << getValue(10, 50) << "\n";
+	// mallon::cpp::Stock is inferred via the using statement at the top of the file
+	Stock apple;
+	apple.setTicker("AAPL");
+	apple.setPrice(50);
 
-	// Even with the using statement present, a fuly qualified call is still allowed
-	std::cout << "getValue(10) " << mallon::cpp::getValue(10) << "\n";
+	std::cout << "apple.getValue(10) " << apple.getValue(10) << "\n";
 
-	std::cout << "using a for loop\n";
+	// Even with the using statement present, a fully qualified name is still allowed
+	mallon::cpp::Stock microsoft;
+	microsoft.setTicker("MSFT");
+	microsoft.setPrice(75);
+
+	std::cout << "microsoft.getValue(10) " << microsoft.getValue(10) << "\n";
+
+	std::cout << "using a for loop with apple\n";
 	for (int i = 0; i < 10; ++i)
 	{
 		if (i % 2 == 0)
-			std::cout << "getValue(" << setw(3) << i * 10 << ", 50) " << setw(7) << getValue(i * 10, 50) << "\n";
+			std::cout << "apple.getValue(" << setw(3) << i * 10 << ") " << setw(7) << apple.getValue(i * 10) << "\n";
 		else
-			std::cout << "getValue(" << setw(3) << i * 20 << ", 50) " << setw(7) << getValue(i * 20, 50) << "\n";
+			std::cout << "apple.getValue(" << setw(3) << i * 20 << ") " << setw(7) << apple.getValue(i * 20) << "\n";
 	}
 
-	std::cout << "using a while loop\n";
+	std::cout << "using a while loop with microsoft\n";
 	int i{ 0 };
 	while (i < 10)
 	{
 		switch (i % 2)
 		{
 		case 0:
-			std::cout << "getValue(" << setw(3) << i * 10 << ", 50) " << setw(7) << getValue(i * 10, 50) << "\n";
+			std::cout << "microsoft.getValue(" << setw(3) << i * 10 << ") " << setw(7) << microsoft.getValue(i * 10) << "\n";
 			break;
 		case 1: // Could use default here
-			std::cout << "getValue(" << setw(3) << i * 20 << ", 50) " << setw(7) << getValue(i * 20, 50) << "\n";
+			std::cout << "microsoft.getValue(" << setw(3) << i * 20 << ") " << setw(7) << microsoft.getValue(i * 20) << "\n";
 			break;
 		}
 		++i;
