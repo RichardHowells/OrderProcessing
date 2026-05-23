@@ -11,5 +11,6 @@
     <File Path="L12-instructions.md" />
   </Folder>
   <Project Path="ConvertAndCompare/ConvertAndCompare.vcxproj" Id="48f85b77-f3e9-4f9b-bfc5-90d1fa591a60" />
+  <Project Path="DevelopToyVector/DevelopToyVector.vcxproj" Id="6415582b-74a8-4ef7-9e6a-6fc102f87b15" />
   <Project Path="OrderProcessing/OrderProcessing.vcxproj" Id="e9818a83-0f3f-4b99-b322-57c5cdf0011b" />
 </Solution>
