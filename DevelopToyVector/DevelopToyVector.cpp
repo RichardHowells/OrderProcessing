@@ -5,6 +5,12 @@
 #include <string>
 #include "toy_vector.h"
 
+class Person {
+    std::string name;
+public:
+    Person(const std::string& name) : name{ name } {}
+};
+
 int main()
 {
     std::cout << "Hello World!\n";
@@ -19,6 +25,9 @@ int main()
     v_string.push_back("Hello world");
 
     std::cout << v_string.back() << "\n";
+
+    // Will not compile.  toy_vector's contained type must have a default constructor
+    //toy_vector<Person> v_person;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
