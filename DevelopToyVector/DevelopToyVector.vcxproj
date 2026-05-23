@@ -141,6 +141,9 @@
   <ItemGroup>
     <ClCompile Include="DevelopToyVector.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="toy_vector.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

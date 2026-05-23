@@ -2,10 +2,23 @@
 //
 
 #include <iostream>
+#include <string>
+#include "toy_vector.h"
 
 int main()
 {
     std::cout << "Hello World!\n";
+
+    toy_vector<int> v_int;
+
+    v_int.push_back(99);
+    std::cout << v_int.back() << "\n";
+
+    toy_vector<std::string> v_string;
+
+    v_string.push_back("Hello world");
+
+    std::cout << v_string.back() << "\n";
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
