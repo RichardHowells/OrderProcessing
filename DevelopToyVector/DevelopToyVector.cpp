@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "toy_vector.h"
+#include <vector>
 
 class Person {
     std::string name;
@@ -51,6 +52,21 @@ int main()
     toy_vector<Person> v_person;
 
     v_person.push_back(Person("Fred"));
+
+    // Create a fresh toy_vector<string> and assign it over an existing one...
+
+    toy_vector<std::string> fresh_vector;
+    fresh_vector.push_back("One");
+    fresh_vector.push_back("Two");
+    fresh_vector.push_back("Three");
+    fresh_vector.push_back("Four");
+
+    v_string = fresh_vector;
+
+    std::cout << "Using a range for loop over the reassigned string(s)\n";
+    for (auto item : v_string)
+        std::cout << "   " << item << "\n";
+
 
 }
 

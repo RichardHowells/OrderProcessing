@@ -15,15 +15,36 @@ public:
 	using iterator = T*;
 	using const_iterator = const T*;
 
-	toy_vector& operator=(const toy_vector& rhs) = delete;
-
 	// Careful - initializers with dependencies...  What's the order of initialization?
 	toy_vector() : data_start{ allocator.allocate(20) }, first_available{ data_start }, limit{ data_start + 20 } {}
 
-	toy_vector(const toy_vector& other) : allocator{ other.allocator }, data_start { allocator.allocate(20) }, first_available{ data_start }, limit{ data_start + 20 }
+	toy_vector(const toy_vector& other) : allocator{ other.allocator }, data_start{ allocator.allocate(20) }, first_available{ data_start }, limit{ data_start + 20 }
 	{
 		std::uninitialized_copy(other.data_start, other.data_start + other.size(), first_available);
 		first_available += other.size();
+	}
+
+	toy_vector& operator=(const toy_vector rhs) 
+	{
+		auto new_allocator = rhs.allocator;
+		auto new_data_start = allocator.allocate(20);
+		std::uninitialized_copy(rhs.data_start, rhs.data_start + rhs.size(), new_data_start);
+		auto new_first_available = new_data_start + rhs.size();
+		auto new_limit = new_data_start + 20;
+
+		// Potentially throwing operations completed - well except for the allocator
+		// Ignore that for the moment
+
+		// Nuke the existing data, use the existing allocator for that
+		allocator.deallocate(data_start, size());
+
+		// Now swap in the new attribute values
+		allocator = new_allocator;		// This is suspect.  For all we know it might throw
+		data_start = new_data_start;
+		first_available = new_first_available;
+		limit = new_limit;
+
+		return *this;
 	}
 
 	~toy_vector() {
