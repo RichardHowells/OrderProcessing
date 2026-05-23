@@ -39,8 +39,19 @@ int main()
 
     std::cout << v_string.back() << "\n";
 
-    // Will not compile.  toy_vector's contained type must have a default constructor
-    //toy_vector<Person> v_person;
+    v_string.push_back("Good morning!");
+
+    toy_vector<std::string> v_string_copy{ v_string };
+
+    std::cout << "Using a range for loop over the string(s)\n";
+    for (auto item : v_string_copy)
+        std::cout << "   " << item << "\n";
+
+    // Will compile - once we remove the dependency on raw array/default constructor
+    toy_vector<Person> v_person;
+
+    v_person.push_back(Person("Fred"));
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
