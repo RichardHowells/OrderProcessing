@@ -24,7 +24,15 @@ public:
 		first_available += other.size();
 	}
 
-	toy_vector& operator=(const toy_vector rhs) 
+	toy_vector(toy_vector&& other) : allocator{ std::move(other.allocator) }, data_start{ other.data_start }, first_available { other.first_available }, limit{ other.limit }
+	{
+		// Leave the other object safe for deletion - it needs memory to delete, but no objects in that memory
+		other.data_start = other.allocator.allocate(20);
+		other.first_available = other.data_start;
+		other.limit = other.data_start + 20;
+	}
+
+	toy_vector& operator=(const toy_vector& rhs) 
 	{
 		auto new_allocator = rhs.allocator;
 		auto new_data_start = allocator.allocate(20);
@@ -35,7 +43,10 @@ public:
 		// Potentially throwing operations completed - well except for the allocator
 		// Ignore that for the moment
 
-		// Nuke the existing data, use the existing allocator for that
+		// Nuke the existing data.  First destroy the objects
+		// then use the existing allocator to release the memory
+		for (auto p = begin(); p != end(); ++p)
+			p->~T();
 		allocator.deallocate(data_start, size());
 
 		// Now swap in the new attribute values
@@ -47,15 +58,19 @@ public:
 		return *this;
 	}
 
+
 	~toy_vector() {
-		allocator.deallocate(data_start, limit - data_start);
+		for (auto p = begin(); p != end(); ++p)
+			p->~T();
+		allocator.deallocate(data_start, 20);
 	}
 
 	size_t size() const { return first_available - data_start; }
 
 	void push_back(const T& newValue)
 	{
-		std::uninitialized_fill(first_available, first_available + 1, newValue);
+		// construct_at is C++20 - previously used allocator.construct
+		std::construct_at(first_available, newValue);
 		++first_available;
 	}
 
