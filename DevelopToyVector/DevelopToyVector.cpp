@@ -20,6 +20,19 @@ int main()
     v_int.push_back(99);
     std::cout << v_int.back() << "\n";
 
+    v_int.push_back(50);
+    v_int.push_back(101);
+
+    std::cout << "Using a manual for loop\n";
+    for(toy_vector<int>::const_iterator v_int_iterator = v_int.begin(); v_int_iterator != v_int.end(); ++v_int_iterator)
+        std::cout << "   " << *v_int_iterator << "\n";
+        
+
+
+    std::cout << "Using a range for loop\n";
+    for (auto item : v_int)
+        std::cout << "   " << item << "\n";
+
     toy_vector<std::string> v_string;
 
     v_string.push_back("Hello world");
