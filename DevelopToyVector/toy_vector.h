@@ -32,28 +32,50 @@ public:
 		other.limit = nullptr;
 	}
 
-	toy_vector& operator=(const toy_vector& rhs) 
+	//toy_vector& operator=(const toy_vector& rhs) 
+	//{
+	//	auto new_allocator = rhs.allocator;
+	//	auto new_data_start = allocator.allocate(20);
+	//	std::uninitialized_copy(rhs.data_start, rhs.data_start + rhs.size(), new_data_start);
+	//	auto new_first_available = new_data_start + rhs.size();
+	//	auto new_limit = new_data_start + 20;
+
+	//	// Potentially throwing operations completed - well except for the allocator
+	//	// Ignore that for the moment
+
+	//	// Nuke the existing data.  First destroy the objects
+	//	// then use the existing allocator to release the memory
+	//	for (auto p = begin(); p != end(); ++p)
+	//		p->~T();
+	//	allocator.deallocate(data_start, size());
+
+	//	// Now swap in the new attribute values
+	//	allocator = new_allocator;		// This is suspect.  For all we know it might throw
+	//	data_start = new_data_start;
+	//	first_available = new_first_available;
+	//	limit = new_limit;
+
+	//	return *this;
+	//}
+
+	// Much simpler assignment - exploit the copy constructor
+	toy_vector& operator=(const toy_vector& rhs)
 	{
-		auto new_allocator = rhs.allocator;
-		auto new_data_start = allocator.allocate(20);
-		std::uninitialized_copy(rhs.data_start, rhs.data_start + rhs.size(), new_data_start);
-		auto new_first_available = new_data_start + rhs.size();
-		auto new_limit = new_data_start + 20;
+		auto copyOfThisObject(*this);
 
-		// Potentially throwing operations completed - well except for the allocator
-		// Ignore that for the moment
+		// Potentially throwing operations completed
 
-		// Nuke the existing data.  First destroy the objects
-		// then use the existing allocator to release the memory
-		for (auto p = begin(); p != end(); ++p)
-			p->~T();
-		allocator.deallocate(data_start, size());
+		// Now swap all of the internals with those of the copied object
+		// which will destroy at the end of this function
+		// except the allocator object these are just pointers.  They will swap very quickly
 
-		// Now swap in the new attribute values
-		allocator = new_allocator;		// This is suspect.  For all we know it might throw
-		data_start = new_data_start;
-		first_available = new_first_available;
-		limit = new_limit;
+		// Bring std::swap into scope
+		using std::swap;
+
+		swap(allocator, copyOfThisObject.allocator);
+		swap(data_start, copyOfThisObject.data_start);
+		swap(first_available, copyOfThisObject.first_available);
+		swap(limit, copyOfThisObject.limit);
 
 		return *this;
 	}
