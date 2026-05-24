@@ -80,6 +80,24 @@ public:
 		return *this;
 	}
 
+	// Move assignment
+	toy_vector& operator=(toy_vector&& rhs) noexcept
+	{
+		// Now swap all of the internals with those of the incoming object
+		// which will destroy 'sometime shortly'
+		// except the allocator object these are just pointers.  They will swap very quickly
+
+		// Bring std::swap into scope
+		using std::swap;
+
+		swap(allocator, rhs.allocator);
+		swap(data_start, rhs.data_start);
+		swap(first_available, rhs.first_available);
+		swap(limit, rhs.limit);
+
+		return *this;
+	}
+
 
 	~toy_vector() {
 		// Destroy the contained items in reverse sequence
