@@ -61,7 +61,7 @@ public:
 	// Much simpler assignment - exploit the copy constructor
 	toy_vector& operator=(const toy_vector& rhs)
 	{
-		auto copyOfThisObject(*this);
+		auto copyOfRhsObject(rhs);
 
 		// Potentially throwing operations completed
 
@@ -72,10 +72,10 @@ public:
 		// Bring std::swap into scope
 		using std::swap;
 
-		swap(allocator, copyOfThisObject.allocator);
-		swap(data_start, copyOfThisObject.data_start);
-		swap(first_available, copyOfThisObject.first_available);
-		swap(limit, copyOfThisObject.limit);
+		swap(allocator, copyOfRhsObject.allocator);
+		swap(data_start, copyOfRhsObject.data_start);
+		swap(first_available, copyOfRhsObject.first_available);
+		swap(limit, copyOfRhsObject.limit);
 
 		return *this;
 	}
