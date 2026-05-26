@@ -124,8 +124,6 @@ def moveAndRenameAndAnnotateInstructionsFiles(labName:str, majorVersion:str, bas
         copy_add_provenance_update_slnx(original_instructions_file_path, completedDir, labName, bonus_version_git_tag, majorVersion)
         copy_add_provenance_update_slnx(original_instructions_file_path, baseDir, labName, bonus_version_git_tag, majorVersion)
 
-        print("Should delete L*-instructions.md files")
-        
     else:
         instructions_file_from_repo = completedBonusDir + "/OrderProcessing/" + "L" + majorVersion + "-instructions.md"
         if os.path.isfile(instructions_file_from_repo):
@@ -140,12 +138,13 @@ def moveAndRenameAndAnnotateInstructionsFiles(labName:str, majorVersion:str, bas
 
     print("delete unwanted instructions files...")
     import pathlib
-    for dir in (completedBonusDir, completedDir, baseDir):
+    # NOTE - this tuple includes the baseDir + "/.." so it will ALSO nuke instructions.md files up in the solution directoy
+    for dir in (completedBonusDir, completedDir, baseDir, baseDir + "/.."):
         dir += "/OrderProcessing"
         print(f"Looking in {dir=}")
-        for p in pathlib.Path(dir).glob("L*-instructions.md"):
+        for p in pathlib.Path(dir).glob("L??-instructions.md"):
             p.unlink()
-        print(f"Removed L*-instructions.md files")
+        print(f"Removed L??-instructions.md files")
 
 
 import sys
