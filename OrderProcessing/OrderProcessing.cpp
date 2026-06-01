@@ -161,8 +161,5 @@ int main()
 	const auto [discountPercentage, reason] = portfolio.getDiscountPolicy();
 	std::cout << "Discount " << discountPercentage << " reason " << reason << "\n";
 
-	Can I leak check this?
-
-
 	std::cout << "Program completed successfully\n";
 }

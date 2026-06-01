@@ -16,6 +16,7 @@ namespace mallon::cpp
 		DiscountPolicy* discountPolicy{ nullptr };
 
 	public:
+		~Portfolio();
 		void addStock(Stock* pStock);
 
 		double averageStockPrice() const;
