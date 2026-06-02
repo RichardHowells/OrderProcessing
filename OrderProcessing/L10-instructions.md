@@ -68,15 +68,16 @@
 
 	#### Refactor Portfolio for clarity
 1. Rename `Portfolio::addStock` to `Portfolio::addProduct` this will require changes at the call sites too
-1. Rename the two `Stock *` fields.  Eg `stock1` to `product1`
+1. Rename the two `Stock *` fields.  Eg `stock1` to `product1`.  Change the types from `Stock *` to `Product *`
+	
 1. Make similar changes to parameter names to remove misleading identifier names
 
 	#### Change name and implementation of Portfolio::averageStockPrice
 1. Rename to `averageProductValue`
 1. Change the implementation to call the polymorphic `Product::getValue` passing the quantity as `1`
-1. In `OrderProcessing.cpp` create a new `Portfolio` object.  Test that you can 
-	1. add both `Stock`s and `Future`s
-	1. `averageProductValue` returns the correct result
+1. In `OrderProcessing.cpp` create a new `Portfolio` object 
+	1. Test that you can add both `Stock`s and `Future`s
+	1. Check that `averageProductValue` returns the correct result
 
 	#### Separate the three classes `Product`, `Stock`, `Future` into their own `.h/.cpp` files
 1. Remember:
@@ -84,11 +85,3 @@
 	1. Add appropriate `#include`s
 	1. When done delete `stockvalue.h/.cpp`
 
-
-
-
-
-
-Odd portfolio.  Only one instance of each Product
-
-Bonus - split the product/future/stock to separate files
