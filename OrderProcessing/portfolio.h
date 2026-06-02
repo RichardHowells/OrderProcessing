@@ -13,8 +13,8 @@ namespace mallon::cpp
 	// The trivial version of Portfolio
 	class Portfolio
 	{
-		Stock* stock1{ nullptr };
-		Stock* stock2{ nullptr };
+		Product* product1{ nullptr };
+		Product* product2{ nullptr };
 
 		std::unique_ptr<DiscountPolicy> discountPolicy;
 
@@ -24,7 +24,7 @@ namespace mallon::cpp
 
 		Portfolio& operator=(const Portfolio& right);
 
-		void addStock(Stock* pStock);
+		void addProduct(Product* pProduct);
 
 		double averageStockPrice() const;
 
