@@ -185,10 +185,10 @@ int main()
 		std::cout << "Average price for empty portfolio " << portfolio.averageProductValue() << "\n";
 
 		portfolio.addProduct(&apple);
-		std::cout << "Average price for apple only portfolio " << portfolio.averageStockPrice() << "\n";
+		std::cout << "Average price for apple only portfolio " << portfolio.averageProductValue() << "\n";
 
 		portfolio.addProduct(&microsoft);
-		std::cout << "Average price for apple + microsoft portfolio " << portfolio.averageStockPrice() << "\n";
+		std::cout << "Average price for apple + microsoft portfolio " << portfolio.averageProductValue() << "\n";
 
 		Portfolio portfolio2;
 		comparePortfolios(portfolio, portfolio2);
