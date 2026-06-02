@@ -4,15 +4,15 @@
 namespace mallon::cpp
 {
 	Portfolio::Portfolio(const Portfolio& other)
-		:stock1{ other.stock1 }, stock2{ other.stock2 }
+		:product1{ other.product1 }, product2{ other.product2 }
 	{
 		if (other.discountPolicy)
 			discountPolicy = std::make_unique<DiscountPolicy>(*other.discountPolicy);
 	}
 	Portfolio& Portfolio::operator=(const Portfolio& right)
 	{
-		stock1 = right.stock2;
-		stock2 = right.stock2;
+		product1 = right.product2;
+		product2 = right.product2;
 		if (right.discountPolicy)
 			discountPolicy = std::make_unique<DiscountPolicy>(*right.discountPolicy);
 		else
@@ -20,12 +20,12 @@ namespace mallon::cpp
 
 		return *this;
 	}
-	void Portfolio::addStock(Stock* pStock)
+	void Portfolio::addProduct(Product* pStock)
 	{
-		if (stock1 == nullptr)
-			stock1 = pStock;
+		if (product1 == nullptr)
+			product1 = pStock;
 		else
-			stock2 = pStock;
+			product2 = pStock;
 	}
 
 	double Portfolio::averageStockPrice() const
@@ -33,17 +33,17 @@ namespace mallon::cpp
 		double totalValue = 0;
 		int count = 0;
 
-		// In C++ ANY non-zero evaluates to true.  This is equivalent to if (stock1 != nullptr)
+		// In C++ ANY non-zero evaluates to true.  This is equivalent to if (product1 != nullptr)
 		// It's a very common idiom in both C and C++
-		if (stock1)
+		if (product1)
 		{
 			++count;
-			totalValue += stock1->getPrice();
+			totalValue += product1->getValue(1);
 		}
-		if (stock2)
+		if (product2)
 		{
 			++count;
-			totalValue += stock2->getPrice();
+			totalValue += product2->getValue(1);
 		}
 
 		if (count == 0)

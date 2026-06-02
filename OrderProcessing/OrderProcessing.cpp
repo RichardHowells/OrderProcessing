@@ -138,6 +138,29 @@ int main()
 
 	std::cout << "microsoft.getValue(10) " << microsoft.getValue(10) << '\n';
 
+	Future google{ "GOOG", 100, 10 };
+	std::cout << "google.getValue(10) " << google.getValue(10) << "\n";
+
+	Product* productPointer;
+
+	// Polymorphic calls via a pointer
+	productPointer = &apple;
+	std::cout << productPointer->getTicker() << ".getValue(10) (via a base class pointer) " << productPointer->getValue(10) << "\n";
+
+	productPointer = &google;
+	std::cout << productPointer->getTicker() << ".getValue(10) (via a base class pointer) " << productPointer->getValue(10) << "\n";
+
+	// Polymorphic calls via a reference - for references it works better when they are function parameters
+	// because an ordinary reference as a variable has to be intialized and cannot be rebound
+	
+	Product& appleRef = apple;
+	std::cout << appleRef.getTicker() << ".getValue(10) (via a base class reference) " << appleRef.getValue(10) << "\n";
+
+	Product& googleRef = google;
+	std::cout << googleRef.getTicker() << ".getValue(10) (via a base class reference) " << googleRef.getValue(10) << "\n";
+
+
+
 	std::cout << "using a for loop with apple\n";
 	for (int i = 0; i < 10; ++i)
 	{
@@ -168,10 +191,10 @@ int main()
 		Portfolio portfolio;
 		std::cout << "Average price for empty portfolio " << portfolio.averageStockPrice() << '\n';
 
-		portfolio.addStock(&apple);
+		portfolio.addProduct(&apple);
 		std::cout << "Average price for apple only portfolio " << portfolio.averageStockPrice() << '\n';
 
-		portfolio.addStock(&microsoft);
+		portfolio.addProduct(&microsoft);
 		std::cout << "Average price for apple + microsoft portfolio " << portfolio.averageStockPrice() << '\n';
 
 		Portfolio portfolio2;
@@ -199,6 +222,11 @@ int main()
 		portfolio5 = portfolio;
 		const auto [discountPercentage5, reason5] = portfolio5.getDiscountPolicy();
 		std::cout << "From portfolio5 - Discount " << discountPercentage5 << " reason " << reason5 << "\n";
+
+		Portfolio portfolio6;
+		portfolio6.addProduct(&google);
+		std::cout << "Average price for Google only portfolio " << portfolio6.averageStockPrice() << "\n";
+
 	}
 	if (allocationCount == 0)
 		std::cout << "No obvious leaks\n";
