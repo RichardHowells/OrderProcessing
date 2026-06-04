@@ -153,18 +153,18 @@ def remove_from_vcxproj_file(vcxproj_file_name:str, unwanted_file_patterns:Seque
         # Build a dictionary mapping each element to its parent
         parent_map = {child: parent for parent in root.iter() for child in parent}
         
-        print(f"The 'None/Include' items entries.  In the file {vcxproj_file_name=}")
-        solution_items_folders = root.findall("./ItemGroup")
-        for solution_items_folder in solution_items_folders:
-            solution_items_files = solution_items_folder.findall("./None")
+        print(f"Examining/removing the 'None/Include' items entries.  In the file {vcxproj_file_name=}")
+        item_group_folders = root.findall("./ItemGroup")
+        for item_group_folder in item_group_folders:
+            none_item_elements = item_group_folder.findall("./None")
 
             files_to_remove = set[ET.Element]()
 
-            for solution_items_file in solution_items_files:
+            for solution_items_file in none_item_elements:
 
                 for unwanted_file_pattern in unwanted_file_patterns:
                     if re.match(unwanted_file_pattern, solution_items_file.attrib["Include"]):
-                        print(f"      {solution_items_file.attrib["Include"]=} is a match on the pattern {unwanted_file_pattern=}")
+                        #print(f"      {solution_items_file.attrib["Include"]=} is a match on the pattern {unwanted_file_pattern=}")
                         files_to_remove.add(solution_items_file)
 
             # Don't want to risk removes whilst iterating.  
@@ -173,9 +173,10 @@ def remove_from_vcxproj_file(vcxproj_file_name:str, unwanted_file_patterns:Seque
             # I spent ages finding remove would run, but it seems, not against the EXACT parent, and the item remained in the tree
             # So DON'T CHANGE THIS CODE!!!
             for element in files_to_remove:
-                print(f"      Removing element {element.attrib["Include"]=}")
+                #print(f"      Removing element {element.attrib["Include"]=}")
                 parent_map[element].remove(element)
 
+        print(f"Removed elements matching {unwanted_file_patterns}")
         # Update that project file on disk 
         #tree.write(vcxproj_file_name)
         with open(vcxproj_file_name, "w") as vcxproj_file:
