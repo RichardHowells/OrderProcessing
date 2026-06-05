@@ -6,5 +6,5 @@
   <Folder Name="/Solution Items/">
     <File Path="README.md" />
   </Folder>
-  <Project Path="OrderProcessing/OrderProcessing.vcxproj" />
+  <Project Path="OrderProcessing/OrderProcessing.vcxproj" Id="e9818a83-0f3f-4b99-b322-57c5cdf0011b" />
 </Solution>
