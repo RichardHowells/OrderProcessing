@@ -23,9 +23,9 @@ int main()
 {
 	std::cout << "Hello World!\n";
 
-	std::cout << "getStockValue(10, 50) " << getValue(10, 50) << "\n";
+	std::cout << "getValue(10, 50) " << getValue(10, 50) << '\n';
 
-	std::cout << "getStockValue(10) " << getValue(10) << "\n";
+	std::cout << "getValue(10) " << getValue(10) << '\n';
 
 	std::cout << "Program completed successfully\n";
 }
