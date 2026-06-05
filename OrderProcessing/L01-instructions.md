@@ -12,6 +12,9 @@
 1. Move the function definition into a new implementation file `stockvalue.cpp`
 1. `stockvalue.cpp` should also `#include "stockvalue.h"`
 1. The program should work as before
+1. Add a for loop to iterate over the integers 0 to 9
+1. Inside the loop if i is even display the result of calling `getStockValue` with a price of 10 * i, and a quantity of 50
+1. if i is odd display the result of calling `getStockValue` with a price of 20 * i, and a quantity of 50
 
 1. Test it by calling from `main`
     - use a line like this to display the result on `stdout`
