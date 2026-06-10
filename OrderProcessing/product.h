@@ -11,6 +11,7 @@ namespace mallon::cpp
 
 	public:
 		Product(std::string ticker, double price);
+		virtual ~Product() {}
 		void setTicker(std::string newTicker);
 		std::string getTicker() const;
 

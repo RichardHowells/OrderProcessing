@@ -5,7 +5,7 @@
 
 namespace mallon::cpp
 {
-	struct DiscountPolicy
+	struct DiscountPolicy sealed
 	{
 		double percentDiscount{ 0 };
 		std::string reason;

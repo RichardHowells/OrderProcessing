@@ -11,7 +11,7 @@ namespace mallon::cpp
 	struct DiscountPolicy;
 
 	// The trivial version of Portfolio
-	class Portfolio
+	class Portfolio sealed
 	{
 		Product* product1{ nullptr };
 		Product* product2{ nullptr };
