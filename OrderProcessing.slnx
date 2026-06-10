@@ -8,6 +8,7 @@
     <File Path=".gitignore" />
     <File Path="create_lab_folders.py" />
     <File Path="README.md" />
+    <File Path="L12-instructions.md" />
   </Folder>
   <Project Path="ConvertAndCompare/ConvertAndCompare.vcxproj" Id="48f85b77-f3e9-4f9b-bfc5-90d1fa591a60" />
   <Project Path="OrderProcessing/OrderProcessing.vcxproj" Id="e9818a83-0f3f-4b99-b322-57c5cdf0011b" />
