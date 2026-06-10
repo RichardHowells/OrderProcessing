@@ -28,6 +28,7 @@ def checkoutCode(repoDir:str, gitTag:str, directoryName:str):
     print(f"Creating and populating {directoryName}")
     os.makedirs(directoryName)                # mkdirs makes any intermediate directories as well
 
+    # Enclosed function.  Directs copytree to ignore the .git directory
     def ignore_git_directory(src_dir, files):
         # Passed a directory and a list of items in that directory
         # Returns a list of items to EXCLUDE
@@ -65,6 +66,21 @@ def tags_as_str(repoDir:str):
     os.chdir(cwd)
     return tags_as_a_str
 
+def replace_in_slnx_file(slnx_file_name:str, old_string:str, replacement_string:str):
+    if os.path.isfile(slnx_file_name):
+        with open(slnx_file_name, "r+") as slnx_file:
+            content = slnx_file.read()
+            print(f"{old_string=}")
+            new_content = content.replace(old_string, replacement_string)
+            print(f"{replacement_string=}")
+            slnx_file.seek(0, os.SEEK_SET)
+
+            slnx_file.truncate()
+            slnx_file.write(new_content)
+
+    return
+
+
 def moveAndRenameAndAnnotateInstructionsFiles(labName:str, majorVersion:str, baseDir:str, 
                                               completedDir:str, completedBonusDir:str,
                                               bonus_version_git_tag:str):
@@ -72,8 +88,15 @@ def moveAndRenameAndAnnotateInstructionsFiles(labName:str, majorVersion:str, bas
     # Rename Lnn-instructions.md to Exmm-instructions.md
     if len(majorVersion) == 1:
         majorVersion = "0" + majorVersion
+
+    #If there is an instructions file at the solution level...
+    if os.path.isfile(completedBonusDir + "/" + "L" + majorVersion + "-instructions.md"):
+        # Rename it to the Exnn-instructions type format
+        # if it happens to be in the slnx file then patch that too
+        replace_in_slnx_file(completedBonusDir + "/OrderProcessing.slnx", "L" + majorVersion + "-instructions.md", labName + "-instructions.md")
     
     instructions_file_name = labName + "-instructions.md"
+
     instructions_file_from_repo = completedBonusDir + "/OrderProcessing/" + "L" + majorVersion + "-instructions.md"
     instructions_file_in_lab_directory = completedBonusDir + "/OrderProcessing/" + instructions_file_name
     print(f"{instructions_file_name=}")
@@ -81,12 +104,15 @@ def moveAndRenameAndAnnotateInstructionsFiles(labName:str, majorVersion:str, bas
         os.rename(instructions_file_from_repo, instructions_file_in_lab_directory)
 
         # Append a provenance annotation
-        with open(instructions_file_in_lab_directory, "a") as instructions_file:
+        with open(instructions_file_from_repo, "a") as instructions_file:
             instructions_file.write(f'<p align="right">Extracted from the git repo tag: {bonus_version_git_tag}</p>\n')
 
-        #copy to the other directories
-        shutil.copyfile(instructions_file_in_lab_directory, completedDir + "/OrderProcessing/" + instructions_file_name)
-        shutil.copyfile(instructions_file_in_lab_directory, baseDir + "/OrderProcessing/" + instructions_file_name)
+        #copy to the parent directory
+        print("**** Need to inject into the .slnx file")
+        shutil.copyfile(instructions_file_in_lab_directory, completedDir + "/" + instructions_file_name)
+        #copy to the other versions (base and completed), also into the parent directory
+        shutil.copyfile(instructions_file_in_lab_directory, completedDir + "/" + instructions_file_name)
+        shutil.copyfile(instructions_file_in_lab_directory, baseDir + "/" + instructions_file_name)
     else:
         raise Exception(f"Cannot find the instructions file. {labName=} {majorVersion=} {completedBonusDir=}")
 
@@ -110,6 +136,8 @@ else:
     
     # In development I run this as...
     # python3 ./create_lab_folders.py https://github.com/RichardHowells/OrderProcessing.git D:/Customers/Mallon/UpdatingMaterials/2026-cpp/labs-test-repo/OrderProcessing D:/Customers/Mallon/UpdatingMaterials/2026-cpp/labs-test-directory
+    # Also works with a local directory as the clone source
+    # python3 ./create_lab_folders.py file://D:\Customers\Mallon\UpdatingMaterials\2026-cpp\labs\OrderProcessing D:/Customers/Mallon/UpdatingMaterials/2026-cpp/labs-test-repo/OrderProcessing D:/Customers/Mallon/UpdatingMaterials/2026-cpp/labs-test-directory
     #
     import argparse
     parser = argparse.ArgumentParser(
@@ -133,7 +161,9 @@ else:
                "Ex07": "7",
                "Ex08": "8",
                "Ex09": "9",
-               "Ex10": "10"
+               "Ex10": "10",
+               "Ex11": "11",
+               "Ex12": "12",
                }
         
 
@@ -195,6 +225,7 @@ else:
         #   - retain it in the bonus directory as well
         #   - something like Ex01-instructions.md
         #   - delete all the unwanted instructions files
+
         moveAndRenameAndAnnotateInstructionsFiles(labName, repoMajorVersion, 
                                                   labsBaseDir + "/" + labName + "-base", 
                                                   labsBaseDir + "/" + labName + "-completed", 
