@@ -4,7 +4,7 @@
 
 1. Working in `stockvalue.h/.cpp`
 1. Add a new class `Product` (in this file)
-1. Have class 'Stock' inherit publically from `Product`
+1. Have class `Stock` inherit publically from `Product`
 1. Push the two data members `ticker` and `price` up into the `Product` base class
 1. Similarly bring the setter and getter functions for `ticker` and `price` up into the base class.  This will require changes in BOTH the `.h` and the `.cpp` files.
 1. `Product` will need a parameter constructor to initialize the two fields, and `Stock` will need an adjustment to the constructor initializer list to pass the parameters up to the base class constructor
@@ -15,7 +15,7 @@
 
 1. Add a class `Future` also publically inheriting from `Product`
 1. It will be similar to `Stock`
-1. Add a field `double depreciation;` to the Future class.  Add a constructor parameter to initialize the field
+1. Add a field `double depreciation;` to the Future class.  It will need `ticker` and `price` parameter to pass up to `Product`. Add a constructor parameter to initialize the `depreciation` field
 
 1. Again your code should run as before
 
@@ -84,4 +84,8 @@
 	1. Header guards
 	1. Add appropriate `#include`s
 	1. When done delete `stockvalue.h/.cpp`
+
+1. Add a `virtual` destructor to `class Product`.  It does not need any logic `virtual ~Product() {}` is suficient.  Add `sealed` to all classes that **don't** have a virtual destructor.
+
+	***Question*** Should `Stock` and `Future` be `sealed`?  Why? Or why not?
 
