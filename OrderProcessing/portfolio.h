@@ -12,8 +12,8 @@ namespace mallon::cpp
 	// Declaration for DiscountPolicy
 	struct DiscountPolicy;
 
-	// The trivial version of Portfolio
-	class Portfolio
+	// The more flexible version of Portfolio
+	class Portfolio final
 	{
 		Product* product1{ nullptr };
 		Product* product2{ nullptr };
