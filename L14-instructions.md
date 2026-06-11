@@ -56,7 +56,7 @@
 	### Add a memcpy version, selected by a constraint
 
 1. Add a second `copy_array` function template, just after the first one.  Give it **exactly** the same signature
-1. Implement it with a single call to `std::memcpy`.  Remember that `memcpy` counts in bytes, not elements
+1. Implement it with a single call to `std::memcpy`.  Note that `memcpy` counts in bytes, not elements
 	```C++
 	std::memcpy(dest, src, count * sizeof(T));
 	```
@@ -107,7 +107,7 @@
 
 	#### See the error messages
 
-1. Add this class above `main`.  It cannot be assigned
+1. Add this class above `main`.  It cannot be assigned because of the deleted operator
 	```C++
 	struct NoAssign {
 		std::string name;
@@ -127,7 +127,7 @@
 		TrivialNoAssign& operator=(const TrivialNoAssign&) = delete;
 	};
 	```
-1. Add a `static_assert` to show that `std::is_trivially_copyable_v<TrivialNoAssign>` is `true`.  Surprising!  Its copy constructor is still trivial, and that is enough to make it trivially copyable
+1. Add a `static_assert` to show that `std::is_trivially_copyable_v<TrivialNoAssign>` is `true`.  This is because its copy constructor is still trivial, and that is enough to make it trivially copyable
 1. With the plain `requires std::is_trivially_copyable_v<T>` version, a call to `copy_array` with `TrivialNoAssign` arrays would compile, and would happily `memcpy` over objects that are not supposed to be assigned.  Our `bitwise_copyable` concept also requires `element_copyable`, so the call is rejected.  Try it
 
 	#### Make the memcpy version safer
