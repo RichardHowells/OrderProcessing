@@ -69,13 +69,7 @@ public:
 		// which will destroy at the end of this function
 		// except the allocator object these are just pointers.  They will swap very quickly
 
-		// Bring std::swap into scope
-		using std::swap;
-
-		swap(allocator, copyOfRhsObject.allocator);
-		swap(data_start, copyOfRhsObject.data_start);
-		swap(first_available, copyOfRhsObject.first_available);
-		swap(limit, copyOfRhsObject.limit);
+		swap(*this, copyOfRhsObject);
 
 		return *this;
 	}
@@ -87,13 +81,7 @@ public:
 		// which will destroy 'sometime shortly'
 		// except the allocator object these are just pointers.  They will swap very quickly
 
-		// Bring std::swap into scope
-		using std::swap;
-
-		swap(allocator, rhs.allocator);
-		swap(data_start, rhs.data_start);
-		swap(first_available, rhs.first_available);
-		swap(limit, rhs.limit);
+		swap(*this, rhs);
 
 		return *this;
 	}
@@ -142,6 +130,17 @@ public:
 
 	iterator end() {
 		return first_available;
+	}
+
+	friend void swap(toy_vector& left, toy_vector& right)
+	{
+		// Bring std::swap into scope
+		using std::swap;
+
+		swap(left.allocator, right.allocator);
+		swap(left.data_start, right.data_start);
+		swap(left.first_available, right.first_available);
+		swap(left.limit, right.limit);
 	}
 };
 
