@@ -24,12 +24,12 @@ public:
 		first_available += other.size();
 	}
 
-	toy_vector(toy_vector&& other) : allocator{ std::move(other.allocator) }, data_start{ other.data_start }, first_available { other.first_available }, limit{ other.limit }
+	toy_vector(toy_vector&& other) : allocator{ std::move(other.allocator) }, data_start{ other.data_start }, first_available{ other.first_available }, limit{ other.limit }
 	{
-		// Leave the other object safe for deletion - it needs memory to delete, but no objects in that memory
-		other.data_start = other.allocator.allocate(20);
-		other.first_available = other.data_start;
-		other.limit = other.data_start + 20;
+		// Leave the other object safe for destruction
+		other.data_start = nullptr;
+		other.first_available = nullptr;
+		other.limit = nullptr;
 	}
 
 	toy_vector& operator=(const toy_vector& rhs) 
@@ -60,9 +60,19 @@ public:
 
 
 	~toy_vector() {
-		for (auto p = begin(); p != end(); ++p)
-			p->~T();
-		allocator.deallocate(data_start, 20);
+		// Destroy the contained items in reverse sequence
+
+		// Note first_available is one PAST the last data item
+		// Hence the decrement at the head of the loop body
+		auto item = first_available;
+		while (item != data_start)
+		{
+			--item;
+			item->~T();
+		}
+
+		if (data_start)
+			allocator.deallocate(data_start, limit - data_start);
 	}
 
 	size_t size() const { return first_available - data_start; }
