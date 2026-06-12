@@ -1,6 +1,10 @@
+from email.mime import base
 import os, stat
 import shutil
 import subprocess
+from typing import Sequence
+import xml.etree.ElementTree as ET
+import re
 
 def checkoutCode(repoDir:str, gitTag:str, directoryName:str):
     print(f"switching to tags/{gitTag}")
@@ -93,6 +97,97 @@ def replace_in_slnx_file(slnx_file_name:str, old_string:str, replacement_string:
 
     return
 
+
+def remove_from_slnx_file(slnx_file_name:str, unwanted_file_patterns:Sequence[str]):
+    if os.path.isfile(slnx_file_name):
+
+        tree = ET.parse(slnx_file_name)
+        root = tree.getroot()
+
+        # Build a dictionary mapping each element to its parent
+        parent_map = {child: parent for parent in root.iter() for child in parent}
+        
+        print(f"The solution items entries.  In the file {slnx_file_name=}")
+        solution_items_folders = root.findall("./Folder/[@Name='/Solution Items/']")
+        for solution_items_folder in solution_items_folders:
+            solution_items_files = solution_items_folder.findall("./File")
+
+            files_to_remove = set[ET.Element]()
+
+            for solution_items_file in solution_items_files:
+
+                for unwanted_file_pattern in unwanted_file_patterns:
+                    if re.match(unwanted_file_pattern, solution_items_file.attrib["Path"]):
+                        print(f"      {solution_items_file.attrib["Path"]=} is a match on the pattern {unwanted_file_pattern=}")
+                        files_to_remove.add(solution_items_file)
+
+            # Don't want to risk removes whilst iterating.  
+            # The set will squash out duplicates
+            # remove needs to run against the EXACT parent element, so use the parent_map
+            # I spent ages finding remove would run, but it seems, not against the EXACT parent, and the item remained in the tree
+            # So DON'T CHANGE THIS CODE!!!
+            for element in files_to_remove:
+                print(f"      Removing element {element.attrib["Path"]=}")
+                parent_map[element].remove(element)
+
+        # Update that solution file on disk 
+        tree.write(slnx_file_name)
+        print(f"Updated solution file at {slnx_file_name=}")
+
+    return
+
+
+def remove_from_vcxproj_file(vcxproj_file_name:str, unwanted_file_patterns:Sequence[str]):
+    if os.path.isfile(vcxproj_file_name):
+
+        # Left to its own devices ET will add a shortname for the namespace and 
+        # write the output proect file with ns0: splattered all over it.
+        # Visual Studio does not like that.  So the hack is to replace the namespace
+        # with a recognizable string *before* loading the tree
+        # Then swap the namespace back in before writing the updated file 
+        with open(vcxproj_file_name) as vcxproj_file:
+            vcxproj_file_xml = vcxproj_file.read().replace('xmlns="http://schemas.microsoft.com/developer/msbuild/2003"', 'namespace=""')
+
+        root = ET.fromstring(vcxproj_file_xml)
+
+        # Build a dictionary mapping each element to its parent
+        parent_map = {child: parent for parent in root.iter() for child in parent}
+        
+        print(f"The 'None/Include' items entries.  In the file {vcxproj_file_name=}")
+        solution_items_folders = root.findall("./ItemGroup")
+        for solution_items_folder in solution_items_folders:
+            solution_items_files = solution_items_folder.findall("./None")
+
+            files_to_remove = set[ET.Element]()
+
+            for solution_items_file in solution_items_files:
+
+                for unwanted_file_pattern in unwanted_file_patterns:
+                    if re.match(unwanted_file_pattern, solution_items_file.attrib["Include"]):
+                        print(f"      {solution_items_file.attrib["Include"]=} is a match on the pattern {unwanted_file_pattern=}")
+                        files_to_remove.add(solution_items_file)
+
+            # Don't want to risk removes whilst iterating.  
+            # The set will squash out duplicates
+            # remove needs to run against the EXACT parent element, so use the parent_map
+            # I spent ages finding remove would run, but it seems, not against the EXACT parent, and the item remained in the tree
+            # So DON'T CHANGE THIS CODE!!!
+            for element in files_to_remove:
+                print(f"      Removing element {element.attrib["Include"]=}")
+                parent_map[element].remove(element)
+
+        # Update that project file on disk 
+        #tree.write(vcxproj_file_name)
+        with open(vcxproj_file_name, "w") as vcxproj_file:
+            xml_as_string = ET.tostring(root, encoding="unicode")
+            # Reinstate the namespace...
+            xml_as_string = xml_as_string.replace('namespace=""', 'xmlns="http://schemas.microsoft.com/developer/msbuild/2003"')
+            vcxproj_file.write(xml_as_string)
+
+        print(f"Updated project file at {vcxproj_file_name=}")
+
+    return
+
 def append_provenance_annotation(instructions_file_from_repo:str, bonus_version_git_tag:str):
     # Append a provenance annotation
     with open(instructions_file_from_repo, "a") as instructions_file:
@@ -103,7 +198,11 @@ def copy_add_provenance_update_slnx(original_instructions_file_path:str, complet
         shutil.copyfile(original_instructions_file_path, desired_instructions_file_path)
         append_provenance_annotation(desired_instructions_file_path, bonus_version_git_tag)
         # if it happens to appear in the slnx file then patch that too
-        replace_in_slnx_file(completedBonusDir + "/OrderProcessing.slnx", "L" + majorVersion + "-instructions.md", labName + "-instructions.md")
+        slnx_file_path = completedBonusDir + "/OrderProcessing.slnx"
+        replace_in_slnx_file(slnx_file_path, "L" + majorVersion + "-instructions.md", labName + "-instructions.md")
+
+        # Just after replacing the instructions for this lab. So they will be preserved
+        remove_from_slnx_file(slnx_file_path, ('.gitattributes', r'L\d\d-instructions.md', 'README.md', 'RebuildAllSolutions.ps1'))
 
 
 def moveAndRenameAndAnnotateInstructionsFiles(labName:str, majorVersion:str, baseDir:str, 
@@ -138,13 +237,30 @@ def moveAndRenameAndAnnotateInstructionsFiles(labName:str, majorVersion:str, bas
 
     print("delete unwanted instructions files...")
     import pathlib
-    # NOTE - this tuple includes the baseDir + "/.." so it will ALSO nuke instructions.md files up in the solution directoy
-    for dir in (completedBonusDir, completedDir, baseDir, baseDir + "/.."):
-        dir += "/OrderProcessing"
-        print(f"Looking in {dir=}")
-        for p in pathlib.Path(dir).glob("L??-instructions.md"):
-            p.unlink()
-        print(f"Removed L??-instructions.md files")
+
+    # Nuke the unwanted instructions.md files from disk.  By starting at baseDir + "/.." (any of the directories would have worked)
+    # it will also catch any such files in the solution directory
+
+    for dirpath, _, files in os.walk(os.path.join(baseDir, "..")):
+        for file in files:
+            if re.match(r"L\d\d-instructions\.md", file):
+                pathlib.Path(dirpath, file).unlink()
+
+
+
+    print(f"Removed L??-instructions.md files")
+
+    # Make sure that the project files do not reference the instructions files
+
+    # Contained function to walk down the subdirectories, (equivalent to the various projects)
+    def remove_from_project_files(start_path:str, unwanted_file_patterns:tuple[str]):
+        for dirpath, _, files in os.walk(start_path):
+            for file in files:
+                if file.endswith('.vcxproj'):
+                    remove_from_vcxproj_file(os.path.join(dirpath, file), unwanted_file_patterns)
+
+    for dir in (completedBonusDir, completedDir, baseDir):
+        remove_from_project_files(dir, (r'L\d\d-instructions\.md',))
 
 
 import sys
