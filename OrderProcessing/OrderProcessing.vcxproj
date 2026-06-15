@@ -128,9 +128,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="OrderProcessing.cpp" />
+    <ClCompile Include="portfolio.cpp" />
     <ClCompile Include="stockvalue.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="portfolio.h" />
     <ClInclude Include="stockvalue.h" />
   </ItemGroup>
   <ItemGroup>
