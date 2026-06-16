@@ -165,6 +165,12 @@ int main()
 	comparePortfolios(&portfolio2, &portfolio);
 	comparePortfolios(&portfolio, &portfolio);
 
+	portfolio.addDiscountPolicy(10, "This is a good customer");
+
+	const auto [discountPercentage, reason] = portfolio.getDiscountPolicy();
+	std::cout << "Discount " << discountPercentage << " reason " << reason << "\n";
+
+
 
 	std::cout << "Program completed successfully\n";
 }
