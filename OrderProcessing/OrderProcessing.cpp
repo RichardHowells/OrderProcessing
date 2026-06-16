@@ -14,6 +14,23 @@
 #include "stockvalue.h"
 #include "portfolio.h"
 
+// Very crude leak checker.  Does NOT cover all cases
+// On entry to a block of code where new and delete should balance, set the allocationCount to 0
+// AFTER the block exits, check allocationCount.  If new/delete *do* balance, it should be zero
+unsigned long allocationCount{ 0 };
+
+void* operator new(std::size_t amount)
+{
+	auto p = ::malloc(amount);
+
+	++allocationCount;
+	return p;
+}
+void operator delete(void* p)
+{
+	--allocationCount;
+	::free(p);
+}
 
 using namespace mallon::cpp;
 using namespace std;
@@ -146,29 +163,36 @@ int main()
 		++i;
 	}
 
-	Portfolio portfolio;
-	std::cout << "Average price for empty portfolio " << portfolio.averageStockPrice() << '\n';
+	{
+		::allocationCount = 0;
+		Portfolio portfolio;
+		std::cout << "Average price for empty portfolio " << portfolio.averageStockPrice() << '\n';
 
-	portfolio.addStock(&apple);
-	std::cout << "Average price for apple only portfolio " << portfolio.averageStockPrice() << '\n';
+		portfolio.addStock(&apple);
+		std::cout << "Average price for apple only portfolio " << portfolio.averageStockPrice() << '\n';
 
-	portfolio.addStock(&microsoft);
-	std::cout << "Average price for apple + microsoft portfolio " << portfolio.averageStockPrice() << '\n';
+		portfolio.addStock(&microsoft);
+		std::cout << "Average price for apple + microsoft portfolio " << portfolio.averageStockPrice() << '\n';
 
+		Portfolio portfolio2;
+		comparePortfolios(portfolio, portfolio2);
+		comparePortfolios(portfolio2, portfolio);
+		comparePortfolios(portfolio, portfolio);
 
-	Portfolio portfolio2;
-	comparePortfolios(portfolio, portfolio2);
-	comparePortfolios(portfolio2, portfolio);
-	comparePortfolios(portfolio, portfolio);
+		comparePortfolios(&portfolio, &portfolio2);
+		comparePortfolios(&portfolio2, &portfolio);
+		comparePortfolios(&portfolio, &portfolio);
 
-	comparePortfolios(&portfolio, &portfolio2);
-	comparePortfolios(&portfolio2, &portfolio);
-	comparePortfolios(&portfolio, &portfolio);
+		portfolio.addDiscountPolicy(10, "This is a good customer");
 
-	portfolio.addDiscountPolicy(10, "This is a good customer");
+		const auto [discountPercentage, reason] = portfolio.getDiscountPolicy();
+		std::cout << "Discount " << discountPercentage << " reason " << reason << "\n";
 
-	const auto [discountPercentage, reason] = portfolio.getDiscountPolicy();
-	std::cout << "Discount " << discountPercentage << " reason " << reason << "\n";
+	}
+	if (allocationCount == 0)
+		std::cout << "No obvious leaks\n";
+	else
+		std::cout << "Leaked " << allocationCount << " heap object(s)\n";
 
 
 
