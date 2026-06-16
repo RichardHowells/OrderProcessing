@@ -1,3 +1,5 @@
+#ifndef STOCKVALUE_H
+#define STOCKVALUE_H
 
 #include <string>
 // You can nest namespaces in one statement
@@ -5,17 +7,28 @@
 namespace mallon::cpp
 {
 	class Stock {
-		std::string ticker;
+		const std::string ticker;
 		double price;
 
 	public:
+		Stock(std::string ticker, double price);
+
 		void setPrice(double newPrice);
-		double getPrice();
+		double getPrice() const
+		{
+			return price;
+		}
 
-		void setTicker(std::string newTicker);
-		std::string getTicker();
+		std::string getTicker() const;
 
-		double getValue(double quantity);
+		double getValue(double quantity) const;
 	};
+
+	inline std::string Stock::getTicker() const
+	{
+		return ticker;
+	}
 }
 
+
+#endif // !STOCKVALUE_H

@@ -6,27 +6,16 @@ namespace mallon
 {
 	namespace cpp
 	{
+		Stock::Stock(std::string ticker, double price) : ticker{ ticker }, price{ price }
+		{
+		}
+
 		void Stock::setPrice(double newPrice)
 		{
 			price = newPrice;
 		}
 
-		double Stock::getPrice()
-		{
-			return price;
-		}
-
-		void Stock::setTicker(std::string newTicker)
-		{
-			ticker = newTicker;
-		}
-
-		std::string Stock::getTicker() 
-		{
-			return ticker;
-		}
-
-		double Stock::getValue(double quantity)
+		double Stock::getValue(double quantity) const
 		{
 			auto stockValue = price * quantity;
 			return stockValue;
