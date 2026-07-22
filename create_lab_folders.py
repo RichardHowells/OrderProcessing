@@ -148,6 +148,11 @@ def remove_from_vcxproj_file(vcxproj_file_name:str, unwanted_file_patterns:Seque
         with open(vcxproj_file_name) as vcxproj_file:
             vcxproj_file_xml = vcxproj_file.read().replace('xmlns="http://schemas.microsoft.com/developer/msbuild/2003"', 'namespace=""')
 
+        # ET.tostring() never re-emits an XML declaration, so capture the original one here
+        # and prepend it again when writing the file back out
+        xml_declaration_match = re.match(r'\s*<\?xml[^>]*\?>', vcxproj_file_xml)
+        xml_declaration = xml_declaration_match.group(0) if xml_declaration_match else ''
+
         root = ET.fromstring(vcxproj_file_xml)
 
         # Build a dictionary mapping each element to its parent
@@ -183,6 +188,8 @@ def remove_from_vcxproj_file(vcxproj_file_name:str, unwanted_file_patterns:Seque
             xml_as_string = ET.tostring(root, encoding="unicode")
             # Reinstate the namespace...
             xml_as_string = xml_as_string.replace('namespace=""', 'xmlns="http://schemas.microsoft.com/developer/msbuild/2003"')
+            if xml_declaration:
+                xml_as_string = xml_declaration + '\n' + xml_as_string
             vcxproj_file.write(xml_as_string)
 
         print(f"Updated project file at {vcxproj_file_name=}")
