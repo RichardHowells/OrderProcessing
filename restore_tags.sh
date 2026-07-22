@@ -3,9 +3,9 @@
 # Retrieved 2026-05-08, License - CC BY-SA 4.0
 
 # EDIT IN VSCODE!!!!  NEED TO PRESERVE JUST LF BETWEEN LINES
-# EDIT IN VSCODE!!!!  NEED TO PRESERVE JUST LF BETWEEN LINES
-# EDIT IN VSCODE!!!!  NEED TO PRESERVE JUST LF BETWEEN LINES
-# EDIT IN VSCODE!!!!  NEED TO PRESERVE JUST LF BETWEEN LINES
+# Supposedly I have configured git to do this in .gitattributes it doesn't seem to work properly
+# Alternatively run...
+# dos2unix restore_tags.sh && ./restore_tags.sh
 
 #!/usr/bin/env bash
 
