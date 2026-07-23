@@ -141,12 +141,13 @@ def remove_from_vcxproj_file(vcxproj_file_name:str, unwanted_file_patterns:Seque
     if os.path.isfile(vcxproj_file_name):
 
         # Left to its own devices ET will add a shortname for the namespace and 
-        # write the output proect file with ns0: splattered all over it.
+        # write the output project file with ns0: splattered all over it.
         # Visual Studio does not like that.  So the hack is to replace the namespace
         # with a recognizable string *before* loading the tree
         # Then swap the namespace back in before writing the updated file 
+        visual_studio_namespace = 'xmlns="http://schemas.microsoft.com/developer/msbuild/2003"'
         with open(vcxproj_file_name) as vcxproj_file:
-            vcxproj_file_xml = vcxproj_file.read().replace('xmlns="http://schemas.microsoft.com/developer/msbuild/2003"', 'namespace=""')
+            vcxproj_file_xml = vcxproj_file.read().replace(visual_studio_namespace, 'namespace=""')
 
         # ET.tostring() never re-emits an XML declaration, so capture the original one here
         # and prepend it again when writing the file back out
@@ -187,7 +188,7 @@ def remove_from_vcxproj_file(vcxproj_file_name:str, unwanted_file_patterns:Seque
         with open(vcxproj_file_name, "w") as vcxproj_file:
             xml_as_string = ET.tostring(root, encoding="unicode")
             # Reinstate the namespace...
-            xml_as_string = xml_as_string.replace('namespace=""', 'xmlns="http://schemas.microsoft.com/developer/msbuild/2003"')
+            xml_as_string = xml_as_string.replace('namespace=""', visual_studio_namespace)
             if xml_declaration:
                 xml_as_string = xml_declaration + '\n' + xml_as_string
             vcxproj_file.write(xml_as_string)
