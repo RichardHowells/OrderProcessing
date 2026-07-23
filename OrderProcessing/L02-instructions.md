@@ -24,12 +24,6 @@
 	1. a fully qualified name
 	1. a `using namespace ...` declaration at the top of the file
 
-1. Add an overload for `getValue`
-    - accept just the `price` as a parameter
-    - use the fixed value `100.0` as a multiplier for the quantity
-
-1. Test your overload by calling it from `main`
-
     ### Use a for loop and an if
 1. Add a `for` loop to iterate `i` over the integers 0 to 9
 1. Inside the loop if `i` is even display the result of calling `getValue` with a price of `10 * i`, and a quantity of `50`
@@ -38,13 +32,7 @@
 
     ## Bonus ideas
 
-1. Remove (maybe comment out) the single parameter overload.  On the double parameter overload give `quantity` a default argument of `100`. The program should work unchanged. 
-
-    **NOTE** Default arguments can remove the need for extra overloads
-
-1. Try using the `auto` keyword to infer the type of any local variables in your code. The program should work unchanged
-
     ### Use a while loop and a switch
-1. Rewrite the loop to use a `while` so that it produces the exact same output as the `for` loop
+1. Duplicate the loop using a `while` so that it produces the exact same output as the `for` loop
 1. Rewrite the `if` inside the loop to use a `switch` (if you used `switch` first time around then rewrite to use `if`) 
 
