@@ -1,6 +1,6 @@
-﻿## Pointers and references
+﻿## Non-owning pointers and references
 
-### Create a class to model a Portfolio
+### Create a class to model a `Portfolio`
 
 #### Create the class skeleton
 1. Add a file `portfolio.h`
@@ -15,7 +15,9 @@
 
 	#### Make `class Portfolio` hold pointers to two `Stock` objects
 
-	**Note** Just two possible entries in the portfolio is clearly unrealistic.  It will get expanded in a later lab
+	**Note** Only two possible entries in the portfolio is clearly unrealistic.  It will get expanded in a later lab
+
+	**Note** These pointers are non-owning.  They will reference objects in memory that are owned by the stack.  There is nothing, other than programmer knowledge to identify these pointers as non-owning.
 
 
 1. Add `private` members for two pointers to `Stock` named `stock1` and `stock2` initialized with `nullptr`
@@ -27,10 +29,10 @@
 	1. return zero if there are no stocks in the portfolio
 	1. otherwise add up the total of the prices and divide by the count of prices
 1. Back in `OrderProcessing.cpp`
-1. Near the bottom of the file (after the loops) create a `Portfolio` object
+1. Near the bottom of the file (after the loops) create a `Portfolio` object.
 1. Display its `averageStockPrice`
-1. Add the `apple` stock object to it. (The function expects a pointer; pass `&apple`)
-1. Discover that this won't work. The `apple` object is declared `const` and its address cannot be passed to a non-const pointer.  Remove the `const` qualifier from `apple`
+1. Add the `apple` stock object to it. (The function expects a pointer; pass `&apple`). The apple object is owned by a stack frame.  It **must not** be `delete`d
+1. Discover that this won't work. The `apple` object is declared `const` and its address cannot be passed to a non-const pointer.  Remove the `const` qualifier from `apple`.  
 1. Display the new `averageStockPrice`
 1. Add the `microsoft` object to the portfolio
 1. Display the new `averageStockPrice`
@@ -44,14 +46,14 @@
 	1. print an appropriate message if `p2` has the highest `averageStockPrice`
 	1. print an appropriate message if the two portfolios have equal `averageStockPrice`
 
-1. Create a few more `Portfolio` objects to test all three branches of this function
+1. Create a few more `Portfolio` objects.  Make up data values that will test all three branches of this function
 	
 	## Bonus ideas
 
 
-1. The `comparePortfolios` function has no business modifying the passed in portfolio objects.  Declare the parameters as `const` references. **NOTE** this may refuse to compile if the `averageStockPrice` function is non-const.  Go back and declare `averageStockPrice` as `const`. This is a good example of how adding `const` later can begin to ripple through a code base
+1. The `comparePortfolios` function has no business modifying the passed in portfolio objects.  Declare the parameters as `const` references. **Note** this may refuse to compile if the `averageStockPrice` function is non-const.  Go back and declare `averageStockPrice` as `const`. This is a good example of how adding `const` later can begin to ripple through a code base
 
-1. Create an overload of the `comparePortfolios` function, to take in two `Stock` pointers and implement the same logic as the original.  (You could implement this by delegating to the original.)  This also has no business modifying the passed in portfolio objects.  Declare the parameters as pointer to `const` . **NOTE** the `averageStockPrice` function should be `const` by now so this should compile. 
+1. Create an overload of the `comparePortfolios` function, to take in two `Stock` pointers and implement the same logic as the original.  (You could implement this by delegating to the original.)  This also has no business modifying the passed in portfolio objects.  Declare the parameters as pointer to `const` . **Note** the `averageStockPrice` function should be `const` by now so this should compile. 
 
 1. Call this overload by passing the addresses of `Portfolio` objects
 1. Check that it prints the correct messages
