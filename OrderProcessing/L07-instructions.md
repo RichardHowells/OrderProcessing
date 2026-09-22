@@ -21,7 +21,7 @@
 	```
 
 1. Add a member function `addDiscountPolicy` taking a `double discountPercentage` and an `std::string reason` as parameters
-1. Implement it in the .cpp file to dynamically allocate a `DiscountPolicy` object initialized from the parameters.  Store the pointer in the `discountPercentage` member. You will need a full include for the header file
+1. Implement it in the .cpp file to dynamically allocate a `DiscountPolicy` object initialized from the parameters.  Store the pointer in the `DiscountPolicy` member. You will need a full include for the header file
 1. Add a member function `getDiscountPolicy`.  A discount policy has two data items, implement this function to return an `std::tuple<double, std::string>`.  Research the documentation for `std::tuple` to determine the required header file.  Further research the documentation for `std::make_tuple` to see how to return the two values packaged into a tuple
 
 	#### Use the `DiscountPolicy` feature from `OrderProcessing.cpp`
@@ -38,7 +38,13 @@
 	#### Fix the memory leak
 
 1. Declare a destructor in `class Portfolio`
-1. Implement it in the .cpp file to `delete` the object `discountPolicy` points to
+
+	**Hint** A destructor has the same name as the class, prefixed with a '~'.  Destructors **never** take parameters, like constructors they have no return type.
+
+1. Implement it in the .cpp file to `delete` the object `discountPolicy` points to.
+	
+	**Note** it is safe to delete a null pointer value.  The language specifically says that this does nothing.
+
 1. Your program should run as before, but without leaking memory
 
 	### Bonus ideas
