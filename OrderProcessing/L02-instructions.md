@@ -20,6 +20,24 @@
     ```
     ### Namespaces
 1. Working in the `stockvalue.h/.cpp` files; package the function in a nested namespace `mallon::cpp`. 
+    1. Enclose the function, AND its declaration in 
+    ```
+    namespace mallon::cpp 
+    {
+        // Namespace content goes here
+    }
+    ```
+    1. Alternatively use simple nesting (try both)
+    ```
+    namespace mallon
+    {
+        namespace cpp 
+        {
+             // Namespace content goes here
+        }
+    }
+    ```
+
 1. Adjust the code in `main` to call the namespace's function.  Try
 	1. a fully qualified name
 	1. a `using namespace ...` declaration at the top of the file
