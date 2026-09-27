@@ -4,7 +4,7 @@
 
 **NOTE** This work is in the `OrderProcessing` project.  All the changes are in `OrderProcessing.cpp`
 
-	### A simple copy_array function template
+### A simple copy_array function template
 
 1. Add `#include <cstring>`, `#include <type_traits>` and `#include <concepts>` at the top of `OrderProcessing.cpp`
 

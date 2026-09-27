@@ -7,6 +7,8 @@
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
     <File Path="create_lab_folders.py" />
+    <File Path="L13-instructions.md" />
+    <File Path="L14-instructions.md" />
     <File Path="README.md" />
     <File Path="L12-instructions.md" />
     <File Path="RebuildAllSolutions.ps1" />
