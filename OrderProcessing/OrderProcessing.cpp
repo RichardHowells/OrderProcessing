@@ -8,6 +8,9 @@
 #include <vector>
 #include <cctype>
 #include <cstddef>
+#include <cstring>
+#include <type_traits>
+#include <concepts>
 
 //double getValue(double price, double quantity = 100.0);
 #include "stock.h"
@@ -50,6 +53,33 @@ void comparePortfolios(const Portfolio* p1, const Portfolio* p2)
 {
 	std::cout << "Passed by const *, ... then delegated to ...";
 	comparePortfolios(*p1, *p2);
+}
+
+// A byte by byte copy is safe for int, but NOT for Portfolio (it owns heap memory)
+static_assert(std::is_trivially_copyable_v<int>);
+static_assert(!std::is_trivially_copyable_v<Portfolio>);
+
+// bitwise_copyable is written in terms of element_copyable, so it subsumes it.
+// When both are satisfied (e.g. int) the more constrained memcpy version is chosen
+template <typename T>
+concept element_copyable = std::assignable_from<T&, const T&>;
+
+template <typename T>
+concept bitwise_copyable = element_copyable<T> && std::is_trivially_copyable_v<T>;
+
+template <element_copyable T>
+void copy_array(T* dest, const T* src, std::size_t count)
+{
+	std::cout << "copy_array: element by element loop\n";
+	for (std::size_t i = 0; i < count; ++i)
+		dest[i] = src[i];
+}
+
+template <bitwise_copyable T>
+void copy_array(T* dest, const T* src, std::size_t count)
+{
+	std::cout << "copy_array: memcpy\n";
+	std::memcpy(dest, src, count * sizeof(T));
 }
 
 
@@ -232,6 +262,42 @@ int main()
 		std::cout << "No obvious leaks\n";
 	else
 		std::cout << "Leaked " << allocationCount << " heap object(s)\n";
+
+	// Copy an array of int - expect the memcpy version
+	int sourceInts[]{ 1, 2, 3, 4, 5 };
+	int destInts[5]{};
+	copy_array(destInts, sourceInts, std::size(sourceInts));
+
+	std::cout << "Copied ints:";
+	for (auto value : destInts)
+		std::cout << ' ' << value;
+	std::cout << '\n';
+
+	// Copy an array of Portfolio - expect the element by element version
+	{
+		::allocationCount = 0;
+		Portfolio sourcePortfolios[3];
+		sourcePortfolios[0].addProduct(&apple);
+		sourcePortfolios[1].addProduct(&microsoft);
+		sourcePortfolios[2].addProduct(&apple);
+		sourcePortfolios[2].addProduct(&google);
+		sourcePortfolios[2].addDiscountPolicy(5, "Copied by copy_array");
+
+		Portfolio destPortfolios[3];
+		copy_array(destPortfolios, sourcePortfolios, std::size(sourcePortfolios));
+
+		std::cout << "Copied portfolio average values:";
+		for (const auto& portfolio : destPortfolios)
+			std::cout << ' ' << portfolio.averageProductValue();
+		std::cout << '\n';
+
+		const auto [copiedDiscount, copiedReason] = destPortfolios[2].getDiscountPolicy();
+		std::cout << "Copied portfolio discount " << copiedDiscount << " reason " << copiedReason << '\n';
+	}
+	if (allocationCount == 0)
+		std::cout << "No obvious leaks from copy_array\n";
+	else
+		std::cout << "Leaked " << allocationCount << " heap object(s) from copy_array\n";
 
 
 
