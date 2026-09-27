@@ -2,6 +2,7 @@
 //
 
 
+#include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -79,8 +80,28 @@ template <bitwise_copyable T>
 void copy_array(T* dest, const T* src, std::size_t count)
 {
 	std::cout << "copy_array: memcpy\n";
-	std::memcpy(dest, src, count * sizeof(T));
+	// memcpy with a null pointer is undefined behaviour, even for a zero count.
+	// memcpy must not be used for overlapping arrays; std::memmove allows overlap
+	if (count != 0)
+		std::memcpy(dest, src, count * sizeof(T));
 }
+
+// Cannot be assigned, so neither copy_array version accepts it
+struct NoAssign {
+	std::string name;
+	NoAssign& operator=(const NoAssign&) = delete;
+};
+
+// The trap: still trivially copyable, because the copy constructor is trivial.
+// bitwise_copyable also requires element_copyable, so copy_array rejects it
+struct TrivialNoAssign {
+	int value;
+	TrivialNoAssign& operator=(const TrivialNoAssign&) = delete;
+};
+
+static_assert(std::is_trivially_copyable_v<TrivialNoAssign>);
+static_assert(!element_copyable<NoAssign>);
+static_assert(!element_copyable<TrivialNoAssign>);
 
 
 
@@ -298,6 +319,21 @@ int main()
 		std::cout << "No obvious leaks from copy_array\n";
 	else
 		std::cout << "Leaked " << allocationCount << " heap object(s) from copy_array\n";
+
+	// The standard library equivalent. It uses memmove for trivially copyable types
+	int stdCopyInts[5]{};
+	std::copy(std::begin(sourceInts), std::end(sourceInts), std::begin(stdCopyInts));
+
+	std::cout << "std::copy ints:";
+	for (auto value : stdCopyInts)
+		std::cout << ' ' << value;
+	std::cout << '\n';
+
+	// Uncomment to see the error messages. Neither copy_array version is allowed
+	//NoAssign noAssignSource[2], noAssignDest[2];
+	//copy_array(noAssignDest, noAssignSource, 2);
+	//TrivialNoAssign trivialSource[2]{}, trivialDest[2]{};
+	//copy_array(trivialDest, trivialSource, 2);
 
 
 
