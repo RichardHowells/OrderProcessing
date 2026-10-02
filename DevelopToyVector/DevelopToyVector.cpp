@@ -86,6 +86,15 @@ int main()
 		std::cout << "Using a range for loop over the reassigned string(s)\n";
 		for (auto item : v_string)
 			std::cout << "   " << item << "\n";
+
+		v_string = std::move(fresh_vector);
+
+		std::cout << "Using a range for loop over the move assigned string toy_vector\n";
+		for (auto item : v_string)
+			std::cout << "   " << item << "\n";
+		std::cout << "...and the size is now " << fresh_vector.size() << '\n';
+
+
 	}
 
 	if (allocationCount == 0)
